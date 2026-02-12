@@ -1,0 +1,53 @@
+{
+  "name": "@berryhouse/core",
+  "version": "1.0.2",
+  "description": "Core conversion library for Meddler - Medium export converter",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "medium",
+    "export",
+    "converter",
+    "markdown",
+    "hugo",
+    "eleventy",
+    "jekyll",
+    "astro",
+    "static-site-generator",
+    "front-matter"
+  ],
+  "author": {
+    "name": "Brennan Kenneth Brown",
+    "url": "https://brennan.day"
+  },
+  "homepage": "https://github.com/brennanbrown/meddler#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brennanbrown/meddler.git",
+    "directory": "packages/core"
+  },
+  "bugs": {
+    "url": "https://github.com/brennanbrown/meddler/issues"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "turndown": "^7.2.0",
+    "js-yaml": "^4.1.0",
+    "@iarna/toml": "^2.2.5"
+  },
+  "devDependencies": {
+    "@types/turndown": "^5.0.5",
+    "@types/js-yaml": "^4.0.9",
+    "typescript": "^5.4.0"
+  },
+  "license": "AGPL-3.0-or-later"
+}
