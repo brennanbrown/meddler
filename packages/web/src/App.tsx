@@ -102,6 +102,9 @@ export default function App() {
             {' · '}
             AGPL-3.0 License
           </p>
+          <p className="mt-1 text-xs">
+            Not affiliated with Medium
+          </p>
         </footer>
       </div>
     </div>

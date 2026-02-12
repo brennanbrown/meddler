@@ -255,6 +255,10 @@ Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md)
 - Inspired by the need to own your content
 - Thanks to Medium for providing export functionality
 
+## Disclaimer
+
+Meddler is not affiliated with, endorsed by, or connected to Medium in any way. This is an independent tool created to help users export and migrate their content from Medium.
+
 ## About
 
 Meddler is a  [Berry House](https://berryhouse.ca) project created by [Brennan Kenneth Brown](https://brennan.day).
