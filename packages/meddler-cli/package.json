@@ -42,7 +42,7 @@
     "node": ">=18.0.0"
   },
   "dependencies": {
-    "@berryhouse/meddler": "1.0.2"
+    "@brennanbrown/meddler": "1.0.2"
   },
   "license": "AGPL-3.0-or-later"
 }

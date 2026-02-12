@@ -23,7 +23,7 @@ import {
   parseEarnings,
   parseFollowing,
   parseInterests,
-} from '@berryhouse/core';
+} from '@brennanbrown/core';
 
 /**
  * Main conversion orchestrator.

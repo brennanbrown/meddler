@@ -18,7 +18,7 @@ import {
   DEFAULT_CONFIG as CORE_DEFAULTS,
   PostMetadata,
   ImageRef,
-} from '@berryhouse/core'
+} from '@brennanbrown/core'
 import type { ParsedPost, ExportSummary, ConfigState, ConversionProgress, LogEntry } from './store'
 
 /**
