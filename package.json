@@ -1,0 +1,20 @@
+{
+  "name": "meddler",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A tool to help people convert their Medium export into multiple different formats.",
+  "workspaces": [
+    "packages/core",
+    "packages/cli",
+    "packages/web",
+    "packages/meddler-cli"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces",
+    "build:core": "npm run build -w packages/core",
+    "build:cli": "npm run build -w packages/cli",
+    "dev": "npm run dev -w packages/cli",
+    "meddler": "node packages/cli/dist/index.js"
+  },
+  "license": "AGPL-3.0-or-later"
+}

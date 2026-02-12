@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.meddler-extracted/
+meddler-output/
+medium-export*
+*.tgz
+*.tsbuildinfo
+# macOS duplicates
+* 2.*
+* 2
