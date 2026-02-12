@@ -1,7 +1,5 @@
 # Ⓜ️ Meddler
 
-[![npm version](https://img.shields.io/npm/v/@berryhouse/core)](https://www.npmjs.com/package/@berryhouse/core)
-[![npm version](https://img.shields.io/npm/v/@berryhouse/meddler)](https://www.npmjs.com/package/@berryhouse/meddler)
 [![npm version](https://img.shields.io/npm/v/meddler-cli)](https://www.npmjs.com/package/meddler-cli)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/34515bd4-e7ec-47d9-9907-0909d121c913/deploy-status)](https://app.netlify.com/projects/meddler/deploys)
 [![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](https://opensource.org/licenses/AGPL-3.0)
