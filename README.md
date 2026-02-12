@@ -1,6 +1,12 @@
 # Ⓜ️ Meddler
 
+[![npm version](https://img.shields.io/npm/v/@berryhouse/core)](https://www.npmjs.com/package/@berryhouse/core)
+[![npm version](https://img.shields.io/npm/v/@berryhouse/meddler)](https://www.npmjs.com/package/@berryhouse/meddler)
+[![npm version](https://img.shields.io/npm/v/meddler-cli)](https://www.npmjs.com/package/meddler-cli)
 [![Netlify Status](https://api.netlify.com/api/v1/badges/34515bd4-e7ec-47d9-9907-0909d121c913/deploy-status)](https://app.netlify.com/projects/meddler/deploys)
+[![License: AGPL-3.0](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](https://opensource.org/licenses/AGPL-3.0)
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-blue)](https://www.typescriptlang.org/)
 
 Ⓜ️ Convert your Medium export to Markdown with front matter for Hugo, Eleventy, Jekyll, Astro, and more.
 
