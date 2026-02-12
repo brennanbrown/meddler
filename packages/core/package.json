@@ -1,5 +1,5 @@
 {
-  "name": "@berryhouse/core",
+  "name": "@brennanbrown/core",
   "version": "1.0.2",
   "description": "Core conversion library for Meddler - Medium export converter",
   "main": "dist/index.js",
