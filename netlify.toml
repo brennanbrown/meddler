@@ -1,5 +1,5 @@
 [build]
-  command = "npm install && npm run build:core && npm run build -w packages/web"
+  command = "npm run build:core && npm run build -w packages/web"
   publish = "packages/web/dist"
 
 [[redirects]]

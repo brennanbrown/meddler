@@ -2,9 +2,9 @@
 
 Ⓜ️ Convert your Medium export to Markdown with front matter for Hugo, Eleventy, Jekyll, Astro, and more.
 
-![Meddler Screenshot](screenshot.jpg)
-
 Meddler helps you reclaim your content from Medium and convert it to static site generator formats. It preserves your posts, drafts, responses, and supplementary data while adding rich metadata like earnings, reading time, and tags.
+
+![Meddler Screenshot](screenshot.jpg)
 
 ## Features
 
