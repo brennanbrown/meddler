@@ -1,0 +1,48 @@
+{
+  "name": "meddler-cli",
+  "version": "1.0.2",
+  "description": "Convert Medium exports to Markdown for Hugo, Eleventy, Jekyll, Astro and more",
+  "bin": {
+    "meddler": "bin/meddler.js"
+  },
+  "files": [
+    "bin",
+    "README.md"
+  ],
+  "keywords": [
+    "medium",
+    "export",
+    "converter",
+    "markdown",
+    "hugo",
+    "eleventy",
+    "jekyll",
+    "astro",
+    "static-site-generator",
+    "cli",
+    "blog",
+    "migration"
+  ],
+  "author": {
+    "name": "Brennan Kenneth Brown",
+    "url": "https://brennan.day"
+  },
+  "homepage": "https://github.com/brennanbrown/meddler#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brennanbrown/meddler.git"
+  },
+  "bugs": {
+    "url": "https://github.com/brennanbrown/meddler/issues"
+  },
+  "scripts": {
+    "build": "echo 'Wrapper package — no build needed'"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@berryhouse/meddler": "1.0.2"
+  },
+  "license": "AGPL-3.0-or-later"
+}
