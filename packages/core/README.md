@@ -415,16 +415,20 @@ AGPL-3.0-or-later
 
 Contributions are welcome! Please read the main [Contributing Guide](../../CONTRIBUTING.md).
 
-### Core-Specific Contributions
+### Acknowledgments
 
-- Parser improvements
-- New export format support
-- Performance optimizations
-- Bug fixes in conversion logic
+- Built with [cheerio](https://cheerio.js.org/) for HTML parsing
+- Markdown conversion via [turndown](https://github.com/domchristie/turndown)
+- Inspired by the need to own your content
+- Thanks to Medium for providing export functionality
 
-## 🍓 About
+## Disclaimer
 
-Meddler is a 🍓 [Berry House](https://berryhouse.ca) project created by [Brennan Kenneth Brown](https://brennan.day).
+Meddler is not affiliated with, endorsed by, or connected to Medium in any way. This is an independent tool created to help users export and migrate their content from Medium.
+
+## About
+
+Meddler is a  [Berry House](https://berryhouse.ca) project created by [Brennan Kenneth Brown](https://brennan.day).
 
 If you find Meddler useful and want to support projects like this, please consider [donating on Ko-fi](https://ko-fi.com/brennan).
 
