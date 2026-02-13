@@ -29,7 +29,7 @@ export default function App() {
             <div className="flex items-center gap-2">
               <span className="text-xl">Ⓜ️</span>
               <span className="font-bold text-lg tracking-tight">Meddler</span>
-              <span className="text-xs text-zinc-400 dark:text-zinc-500 ml-1 hidden sm:inline">Medium Export Converter</span>
+              <span className="text-xs text-zinc-500 dark:text-zinc-400 ml-1 hidden sm:inline">Medium Export Converter</span>
             </div>
             <button
               onClick={state.toggleDarkMode}
@@ -59,7 +59,7 @@ export default function App() {
                         ? 'bg-green-600 text-white shadow-lg shadow-green-600/20'
                         : isDone
                         ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/50 cursor-pointer'
-                        : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-400 dark:text-zinc-500 cursor-default'
+                        : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 cursor-default'
                     }`}
                     aria-current={isActive ? 'step' : undefined}
                   >
@@ -86,17 +86,17 @@ export default function App() {
         </main>
 
         {/* Footer */}
-        <footer className="border-t border-zinc-200 dark:border-zinc-800 py-6 text-center text-xs text-zinc-400 dark:text-zinc-500">
+        <footer className="border-t border-zinc-200 dark:border-zinc-800 py-6 text-center text-xs text-zinc-500 dark:text-zinc-400">
           <p>Your files never leave your browser. 100% client-side processing.</p>
           <p className="mt-1">
-            🍓 A <a href="https://berryhouse.ca" className="underline hover:text-zinc-600 dark:hover:text-zinc-300" target="_blank" rel="noopener noreferrer">Berry House</a> project by <a href="https://brennan.day" className="underline hover:text-zinc-600 dark:hover:text-zinc-300" target="_blank" rel="noopener noreferrer">Brennan Kenneth Brown</a>
+            🍓 A <a href="https://berryhouse.ca" className="underline hover:text-zinc-700 dark:hover:text-zinc-200" target="_blank" rel="noopener noreferrer">Berry House</a> project by <a href="https://brennan.day" className="underline hover:text-zinc-700 dark:hover:text-zinc-200" target="_blank" rel="noopener noreferrer">Brennan Kenneth Brown</a>
           </p>
           <p className="mt-1">
-            <a href="https://github.com/brennanbrown/meddler" className="underline hover:text-zinc-600 dark:hover:text-zinc-300" target="_blank" rel="noopener noreferrer">
+            <a href="https://github.com/brennanbrown/meddler" className="underline hover:text-zinc-700 dark:hover:text-zinc-200" target="_blank" rel="noopener noreferrer">
               GitHub
             </a>
             {' · '}
-            <a href="https://ko-fi.com/brennan" className="underline hover:text-zinc-600 dark:hover:text-zinc-300" target="_blank" rel="noopener noreferrer">
+            <a href="https://ko-fi.com/brennan" className="underline hover:text-zinc-700 dark:hover:text-zinc-200" target="_blank" rel="noopener noreferrer">
               Support Meddler
             </a>
             {' · '}
