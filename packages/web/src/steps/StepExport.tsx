@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { Download, RotateCcw, ArrowLeft, Loader2, CheckCircle2, AlertTriangle, FileText, ChevronDown, ChevronUp } from 'lucide-react'
 import { runConversion } from '../engine'
 import type { ParsedPost, ConversionProgress, LogEntry } from '../store'
@@ -12,6 +12,24 @@ export default function StepExport({ state }: Props) {
   const [showLog, setShowLog] = useState(false)
 
   const selectedPosts = (posts as ParsedPost[]).filter((p: ParsedPost) => p.selected)
+
+  // Reset progress when config changes after a completed export
+  const configRef = useRef(config)
+  useEffect(() => {
+    if (configRef.current !== config && (progress.phase === 'done' || progress.phase === 'error')) {
+      setProgress({
+        phase: 'idle',
+        current: 0,
+        total: 0,
+        currentFile: '',
+        log: [],
+        report: null,
+        zipBlob: null,
+        zipSize: 0,
+      })
+    }
+    configRef.current = config
+  }, [config, progress.phase, setProgress])
 
   const startExport = useCallback(async () => {
     setProgress({
