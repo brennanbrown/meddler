@@ -385,7 +385,7 @@ export async function runConversion(
       else if (meta.type === 'response') responsesIncluded++
       else postsConverted++
 
-      log.push({ type: 'info', message: `✓ ${meta.slug}` })
+      log.push({ type: 'info', message: `✓ ${outputPath}` })
     } catch (err: any) {
       log.push({ type: 'error', message: `✗ ${post.filename}: ${err.message}` })
       errors.push({ file: post.filename, message: err.message })
