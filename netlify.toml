@@ -2,10 +2,23 @@
   command = "npm run build:core && npm run build -w packages/web"
   publish = "packages/web/dist"
 
+# Exclude specific files from SPA fallback (must come before catch-all)
+[[redirects]]
+  from = "/robots.txt"
+  to = "/robots.txt"
+  status = 200
+
+[[redirects]]
+  from = "/sitemap.xml"
+  to = "/sitemap.xml"
+  status = 200
+
+# SPA fallback for all other routes
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
+  force = false
 
 [[headers]]
   for = "/*"
