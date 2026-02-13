@@ -56,7 +56,7 @@ export default function App() {
                     disabled={!isClickable && !isActive}
                     className={`flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-all ${
                       isActive
-                        ? 'bg-green-600 text-white shadow-lg shadow-green-600/20'
+                        ? 'bg-green-700 text-white shadow-lg shadow-green-700/20'
                         : isDone
                         ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/50 cursor-pointer'
                         : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-500 dark:text-zinc-400 cursor-default'
@@ -68,7 +68,7 @@ export default function App() {
                   </button>
                   {i < STEPS.length - 1 && (
                     <div className={`w-8 sm:w-16 h-0.5 mx-1 rounded ${
-                      i < currentIdx ? 'bg-green-500' : 'bg-zinc-200 dark:bg-zinc-700'
+                      i < currentIdx ? 'bg-green-600' : 'bg-zinc-200 dark:bg-zinc-700'
                     }`} />
                   )}
                 </div>
