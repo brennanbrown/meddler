@@ -89,12 +89,12 @@ export default function StepExport({ state }: Props) {
 
           <div className="grid grid-cols-2 gap-3 text-left mb-6">
             <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg">
-              <p className="text-xs text-zinc-400 mb-1">Posts</p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-1">Posts</p>
               <p className="font-bold">{selectedPosts.filter((p: ParsedPost) => p.type === 'published').length} published</p>
               <p className="text-sm text-zinc-500">{selectedPosts.filter((p: ParsedPost) => p.isDraft).length} drafts</p>
             </div>
             <div className="p-3 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg">
-              <p className="text-xs text-zinc-400 mb-1">Output</p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 mb-1">Output</p>
               <p className="font-bold capitalize">{config.target}</p>
               <p className="text-sm text-zinc-500">{config.format} / {config.outputFormat}</p>
             </div>
@@ -105,7 +105,7 @@ export default function StepExport({ state }: Props) {
             Start Export
           </button>
 
-          <button onClick={() => setStep('config')} className="mt-3 text-sm text-zinc-400 hover:text-zinc-600 transition-colors">
+          <button onClick={() => setStep('config')} className="mt-3 text-sm text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors">
             ← Back to settings
           </button>
         </div>
@@ -134,7 +134,7 @@ export default function StepExport({ state }: Props) {
               style={{ width: `${percent}%` }}
             />
           </div>
-          <p className="text-xs text-zinc-400 text-right">
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 text-right">
             {progress.current}/{progress.total} ({percent}%)
           </p>
         </div>
@@ -152,15 +152,15 @@ export default function StepExport({ state }: Props) {
             <div className="grid grid-cols-3 gap-3 text-center my-4">
               <div className="p-2 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg">
                 <p className="text-lg font-bold">{progress.report.summary.postsConverted}</p>
-                <p className="text-xs text-zinc-400">Published</p>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">Published</p>
               </div>
               <div className="p-2 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg">
                 <p className="text-lg font-bold">{progress.report.summary.draftsConverted}</p>
-                <p className="text-xs text-zinc-400">Drafts</p>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">Drafts</p>
               </div>
               <div className="p-2 bg-zinc-50 dark:bg-zinc-800/50 rounded-lg">
                 <p className="text-lg font-bold">{progress.report.summary.supplementaryFiles}</p>
-                <p className="text-xs text-zinc-400">Data files</p>
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">Data files</p>
               </div>
             </div>
           )}
@@ -207,7 +207,7 @@ export default function StepExport({ state }: Props) {
       {progress.log.length > 0 && (
         <div className="mt-4">
           <button onClick={() => setShowLog(!showLog)}
-            className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-zinc-600 transition-colors">
+            className="inline-flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 transition-colors">
             {showLog ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
             {showLog ? 'Hide' : 'Show'} conversion log ({progress.log.length})
           </button>

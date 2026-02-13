@@ -9,7 +9,7 @@ interface Props {
 function StatCard({ icon, value, label }: { icon: React.ReactNode; value: string | number; label: string }) {
   return (
     <div className="card px-4 py-3 flex items-center gap-3">
-      <div className="text-zinc-400 dark:text-zinc-500">{icon}</div>
+      <div className="text-zinc-500 dark:text-zinc-400">{icon}</div>
       <div>
         <p className="text-xl font-bold leading-tight">{value}</p>
         <p className="text-xs text-zinc-500">{label}</p>
@@ -95,7 +95,7 @@ export default function StepPreview({ state }: Props) {
         </div>
 
         {summary.dateRange.earliest && (
-          <p className="text-xs text-zinc-400 mt-4 text-center">
+          <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-4 text-center">
             Date range: {formatDate(summary.dateRange.earliest)} → {formatDate(summary.dateRange.latest)}
           </p>
         )}
@@ -116,7 +116,7 @@ export default function StepPreview({ state }: Props) {
         <div className="p-4 border-b border-zinc-200 dark:border-zinc-800">
           <div className="flex items-center gap-3 mb-3">
             <div className="relative flex-1">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-400" />
+              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 dark:text-zinc-400" />
               <input
                 type="text"
                 placeholder="Search posts..."
@@ -160,13 +160,13 @@ export default function StepPreview({ state }: Props) {
               key={post.filename}
               className="flex items-center gap-3 px-4 py-3 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors group"
             >
-              <button onClick={() => togglePost(i)} className="shrink-0 text-zinc-400 hover:text-green-600">
+              <button onClick={() => togglePost(i)} className="shrink-0 text-zinc-500 dark:text-zinc-400 hover:text-green-600">
                 {post.selected ? <CheckSquare size={18} className="text-green-600" /> : <Square size={18} />}
               </button>
               <div className="flex-1 min-w-0 cursor-pointer" onClick={() => setPreviewPost(post)}>
                 <p className="text-sm font-medium truncate">{post.title}</p>
                 <div className="flex items-center gap-2 mt-0.5">
-                  <span className="text-xs text-zinc-400">{formatFullDate(post.date)}</span>
+                  <span className="text-xs text-zinc-500 dark:text-zinc-400">{formatFullDate(post.date)}</span>
                   <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
                     post.type === 'published' ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400' :
                     post.type === 'draft' ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400' :
@@ -180,7 +180,7 @@ export default function StepPreview({ state }: Props) {
             </div>
           ))}
           {filtered.length === 0 && (
-            <div className="p-8 text-center text-sm text-zinc-400">No posts match your search.</div>
+            <div className="p-8 text-center text-sm text-zinc-500 dark:text-zinc-400">No posts match your search.</div>
           )}
         </div>
       </div>
@@ -191,10 +191,10 @@ export default function StepPreview({ state }: Props) {
           <div className="card max-w-2xl w-full max-h-[80vh] overflow-y-auto p-6" onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-lg font-bold">{previewPost.title}</h3>
-              <button onClick={() => setPreviewPost(null)} className="text-zinc-400 hover:text-zinc-600 text-sm">Close</button>
+              <button onClick={() => setPreviewPost(null)} className="text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-200 text-sm">Close</button>
             </div>
             {previewPost.subtitle && <p className="text-sm text-zinc-500 italic mb-3">{previewPost.subtitle}</p>}
-            <div className="flex gap-2 mb-4 text-xs text-zinc-400">
+            <div className="flex gap-2 mb-4 text-xs text-zinc-500 dark:text-zinc-400">
               {previewPost.date && <span>{formatFullDate(previewPost.date)}</span>}
               <span className="capitalize">{previewPost.type}</span>
               <span>ID: {previewPost.mediumId}</span>

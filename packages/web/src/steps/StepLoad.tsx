@@ -95,7 +95,7 @@ export default function StepLoad({ state }: Props) {
             <div className={`w-16 h-16 rounded-2xl flex items-center justify-center ${
               dragging ? 'bg-green-100 dark:bg-green-900/40' : 'bg-zinc-100 dark:bg-zinc-800'
             }`}>
-              <Upload size={28} className={dragging ? 'text-green-600' : 'text-zinc-400'} />
+              <Upload size={28} className={dragging ? 'text-green-600' : 'text-zinc-500 dark:text-zinc-400'} />
             </div>
             <div>
               <p className="text-lg font-medium">Drag & drop your Medium export here</p>
@@ -157,7 +157,7 @@ export default function StepLoad({ state }: Props) {
       )}
 
       {/* Privacy notice */}
-      <div className="mt-8 flex items-start gap-3 text-xs text-zinc-400 dark:text-zinc-500">
+      <div className="mt-8 flex items-start gap-3 text-xs text-zinc-500 dark:text-zinc-400">
         <Lock size={14} className="mt-0.5 shrink-0" />
         <p>Your files never leave your browser. All processing happens locally on your device. No data is sent to any server.</p>
       </div>
@@ -168,7 +168,7 @@ export default function StepLoad({ state }: Props) {
           href="https://help.medium.com/hc/en-us/articles/115004745787-Export-your-account-data"
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-1.5 text-xs text-zinc-400 hover:text-green-600 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400 hover:text-green-600 transition-colors"
         >
           <HelpCircle size={14} />
           How to export your Medium data

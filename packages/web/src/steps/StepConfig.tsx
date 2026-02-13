@@ -13,7 +13,7 @@ function Section({ title, defaultOpen = true, children }: { title: string; defau
     <div className="border-b border-zinc-200 dark:border-zinc-800 last:border-0">
       <button onClick={() => setOpen(!open)} className="w-full flex items-center justify-between px-5 py-3.5 hover:bg-zinc-50 dark:hover:bg-zinc-800/30 transition-colors">
         <span className="font-medium text-sm">{title}</span>
-        {open ? <ChevronUp size={16} className="text-zinc-400" /> : <ChevronDown size={16} className="text-zinc-400" />}
+        {open ? <ChevronUp size={16} className="text-zinc-500 dark:text-zinc-400" /> : <ChevronDown size={16} className="text-zinc-500 dark:text-zinc-400" />}
       </button>
       {open && <div className="px-5 pb-5 space-y-4">{children}</div>}
     </div>
@@ -29,7 +29,7 @@ function Radio({ name, value, checked, onChange, label, desc }: {
         className="mt-1 accent-green-600" />
       <div>
         <span className="text-sm font-medium group-hover:text-green-600 transition-colors">{label}</span>
-        {desc && <p className="text-xs text-zinc-400 mt-0.5">{desc}</p>}
+        {desc && <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">{desc}</p>}
       </div>
     </label>
   )
@@ -44,7 +44,7 @@ function Toggle({ checked, onChange, label, desc }: {
         className="mt-1 accent-green-600 rounded" />
       <div>
         <span className="text-sm group-hover:text-green-600 transition-colors">{label}</span>
-        {desc && <p className="text-xs text-zinc-400 mt-0.5">{desc}</p>}
+        {desc && <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-0.5">{desc}</p>}
       </div>
     </label>
   )
@@ -201,7 +201,7 @@ export default function StepConfig({ state }: Props) {
                   <input className="input-base flex-1" placeholder="value" value={field.value}
                     onChange={e => { const f = [...config.extraFields]; f[i] = { ...f[i], value: e.target.value }; updateConfig({ extraFields: f }) }} />
                   <button onClick={() => { const f = [...config.extraFields]; f.splice(i, 1); updateConfig({ extraFields: f }) }}
-                    className="p-1.5 text-zinc-400 hover:text-red-500"><Trash2 size={14} /></button>
+                    className="p-1.5 text-zinc-500 dark:text-zinc-400 hover:text-red-500"><Trash2 size={14} /></button>
                 </div>
               ))}
               <button onClick={() => updateConfig({ extraFields: [...config.extraFields, { key: '', value: '' }] })}
@@ -222,7 +222,7 @@ export default function StepConfig({ state }: Props) {
           <div className="card overflow-hidden">
             <div className="px-4 py-2 bg-zinc-100 dark:bg-zinc-800 text-xs text-zinc-500 flex items-center justify-between">
               <span>Preview: {samplePost.title}</span>
-              <span className="text-zinc-400">{config.outputFormat === 'markdown' ? '.md' : config.outputFormat === 'html' ? '.html' : '.json'}</span>
+              <span className="text-zinc-500 dark:text-zinc-400">{config.outputFormat === 'markdown' ? '.md' : config.outputFormat === 'html' ? '.html' : '.json'}</span>
             </div>
             <pre className="p-4 text-xs leading-relaxed overflow-x-auto max-h-96 bg-zinc-950 text-green-400 font-mono">
               {livePreview.slice(0, 3000)}{livePreview.length > 3000 ? '\n\n... (truncated)' : ''}
