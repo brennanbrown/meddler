@@ -10,6 +10,8 @@
 
 Meddler helps you reclaim your content from Medium and convert it to static site generator formats. It preserves your posts, drafts, responses, and supplementary data while adding rich metadata like earnings, reading time, and tags.
 
+📖 **[View CLI Documentation](https://meddler.fyi/docs)** — Complete reference for all command-line options and configuration.
+
 ![Meddler Screenshot](screenshot.jpg)
 
 ## Features
