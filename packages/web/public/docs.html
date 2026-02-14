@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CLI Documentation - Meddler</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            'sans': ['Inter', 'ui-sans-serif', 'system-ui'],
+          },
+        }
+      }
+    }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    .prose {
+      max-width: none;
+    }
+    .prose h2 {
+      @apply text-2xl font-semibold mt-8 mb-4 text-zinc-900 dark:text-zinc-100;
+    }
+    .prose h3 {
+      @apply text-xl font-semibold mt-6 mb-3 text-zinc-900 dark:text-zinc-100;
+    }
+    .prose h4 {
+      @apply text-lg font-medium mt-4 mb-2 text-zinc-900 dark:text-zinc-100;
+    }
+    .prose p {
+      @apply mb-4 text-zinc-700 dark:text-zinc-300;
+    }
+    .prose ul, .prose ol {
+      @apply mb-4 ml-6 text-zinc-700 dark:text-zinc-300;
+    }
+    .prose li {
+      @apply mb-2;
+    }
+    .prose code {
+      @apply bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-sm font-mono text-zinc-800 dark:text-zinc-200;
+    }
+    .prose pre {
+      @apply bg-zinc-100 dark:bg-zinc-800 p-4 rounded-lg mb-4 overflow-x-auto;
+    }
+    .prose pre code {
+      @apply bg-transparent p-0 text-sm;
+    }
+    .prose blockquote {
+      @apply border-l-4 border-zinc-300 dark:border-zinc-600 pl-4 my-4 text-zinc-600 dark:text-zinc-400;
+    }
+    .prose a {
+      @apply text-blue-600 dark:text-blue-400 hover:underline;
+    }
+    .prose table {
+      @apply w-full mb-4 border-collapse;
+    }
+    .prose th, .prose td {
+      @apply border border-zinc-200 dark:border-zinc-700 px-3 py-2 text-left;
+    }
+    .prose th {
+      @apply bg-zinc-50 dark:bg-zinc-800 font-medium;
+    }
+    .prose hr {
+      @apply border-zinc-200 dark:border-zinc-700 my-8;
+    }
+    .anchor-link {
+      @apply opacity-0 hover:opacity-100 transition-opacity ml-2 text-zinc-400;
+    }
+    h2:hover .anchor-link,
+    h3:hover .anchor-link,
+    h4:hover .anchor-link {
+      @apply opacity-100;
+    }
+    .nav-link {
+      @apply text-zinc-600 dark:text-zinc-400 hover:text-zinc-900 dark:hover:text-zinc-100 transition-colors;
+    }
+    .nav-link.active {
+      @apply text-zinc-900 dark:text-zinc-100 font-medium;
+    }
+  </style>
+</head>
+<body class="bg-zinc-50 dark:bg-zinc-950 text-zinc-900 dark:text-zinc-100 transition-colors">
+  <!-- Header -->
+  <header class="sticky top-0 z-50 backdrop-blur-md bg-zinc-50/80 dark:bg-zinc-950/80 border-b border-zinc-200 dark:border-zinc-800">
+    <div class="max-w-6xl mx-auto px-4 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-xl">Ⓜ️</span>
+        <span class="font-bold text-lg tracking-tight">Meddler</span>
+        <span class="text-xs text-zinc-500 dark:text-zinc-400 ml-1 hidden sm:inline">CLI Documentation</span>
+      </div>
+      <div class="flex items-center gap-4">
+        <a href="/" class="nav-link">← Back to App</a>
+        <button id="darkModeToggle" class="p-2 rounded-lg hover:bg-zinc-200 dark:hover:bg-zinc-800 transition-colors" aria-label="Toggle dark mode">
+          <svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+          </svg>
+          <svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <div class="max-w-6xl mx-auto px-4 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-8">
+      <!-- Sidebar -->
+      <aside class="lg:col-span-1">
+        <nav class="sticky top-24 space-y-1">
+          <h3 class="text-xs font-semibold text-zinc-500 dark:text-zinc-400 uppercase tracking-wider mb-3">Contents</h3>
+          <ul class="space-y-1 text-sm">
+            <li><a href="#quick-start" class="nav-link block py-1">Quick Start</a></li>
+            <li><a href="#command-reference" class="nav-link block py-1">Command Reference</a></li>
+            <li><a href="#meddler-convert" class="nav-link block py-2 pl-4">convert</a></li>
+            <li><a href="#meddler-validate" class="nav-link block py-2 pl-4">validate</a></li>
+            <li><a href="#meddler-info" class="nav-link block py-2 pl-4">info</a></li>
+            <li><a href="#target-ssg-presets" class="nav-link block py-1">SSG Presets</a></li>
+            <li><a href="#front-matter-formats" class="nav-link block py-1">Front Matter</a></li>
+            <li><a href="#image-handling" class="nav-link block py-1">Images</a></li>
+            <li><a href="#date-formats" class="nav-link block py-1">Dates</a></li>
+            <li><a href="#advanced-configuration" class="nav-link block py-1">Advanced</a></li>
+            <li><a href="#troubleshooting" class="nav-link block py-1">Troubleshooting</a></li>
+          </ul>
+        </nav>
+      </aside>
+
+      <!-- Content -->
+      <main class="lg:col-span-3 prose">
+        <h1>Meddler CLI Documentation</h1>
+        <p class="text-lg text-zinc-600 dark:text-zinc-400">Complete reference for all command-line options and configuration.</p>
+
+        <h2 id="quick-start">Quick Start</h2>
+        <pre><code class="language-bash"># Basic conversion
+meddler convert export.zip
+
+# Advanced Eleventy setup
+meddler convert export.zip \
+  --target eleventy \
+  --format yaml \
+  --images download \
+  --unquoted-dates \
+  --rewrite-image-urls</code></pre>
+
+        <h2 id="command-reference">Command Reference</h2>
+
+        <h3 id="meddler-convert"><code>meddler convert</code></h3>
+        <p>Convert a Medium export to static site generator formats.</p>
+        <pre><code class="language-bash">meddler convert &lt;input-path&gt; [options]</code></pre>
+
+        <h4>Arguments</h4>
+        <ul>
+          <li><code>&lt;input-path&gt;</code>: Path to extracted Medium export folder or .zip file</li>
+        </ul>
+
+        <h4>Output Options</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Option</th>
+              <th>Short</th>
+              <th>Description</th>
+              <th>Default</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>--output &lt;dir&gt;</code></td>
+              <td><code>-o</code></td>
+              <td>Output directory</td>
+              <td><code>./meddler-output</code></td>
+            </tr>
+            <tr>
+              <td><code>--dry-run</code></td>
+              <td></td>
+              <td>Preview without writing files</td>
+              <td><code>false</code></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>Front Matter Options</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Option</th>
+              <th>Description</th>
+              <th>Default</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>--format &lt;fmt&gt;</code></td>
+              <td>Front matter format: <code>yaml</code>, <code>toml</code>, <code>json</code>, <code>none</code></td>
+              <td><code>yaml</code></td>
+            </tr>
+            <tr>
+              <td><code>--output-format &lt;fmt&gt;</code></td>
+              <td>Output format: <code>markdown</code>, <code>html</code>, <code>structured-json</code></td>
+              <td><code>markdown</code></td>
+            </tr>
+            <tr>
+              <td><code>--target &lt;ssg&gt;</code></td>
+              <td>Target SSG: <code>generic</code>, <code>hugo</code>, <code>eleventy</code>, <code>jekyll</code>, <code>astro</code></td>
+              <td><code>generic</code></td>
+            </tr>
+            <tr>
+              <td><code>--earnings</code></td>
+              <td>Inject partner program earnings</td>
+              <td><code>false</code></td>
+            </tr>
+            <tr>
+              <td><code>--unquoted-dates</code></td>
+              <td>Output dates without quotes (Eleventy)</td>
+              <td><code>false</code></td>
+            </tr>
+            <tr>
+              <td><code>--rewrite-image-urls</code></td>
+              <td>Rewrite Medium CDN URLs to local paths</td>
+              <td><code>false</code></td>
+            </tr>
+            <tr>
+              <td><code>--image-base-url &lt;url&gt;</code></td>
+              <td>Base URL for rewritten images</td>
+              <td><code>/images</code></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>Content Options</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Option</th>
+              <th>Description</th>
+              <th>Default</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>--drafts</code></td>
+              <td>Include draft posts</td>
+              <td><code>true</code></td>
+            </tr>
+            <tr>
+              <td><code>--no-drafts</code></td>
+              <td>Exclude draft posts</td>
+              <td><code>false</code></td>
+            </tr>
+            <tr>
+              <td><code>--responses</code></td>
+              <td>Include short responses/comments</td>
+              <td><code>false</code></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>Image Options</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Option</th>
+              <th>Description</th>
+              <th>Default</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>--images &lt;mode&gt;</code></td>
+              <td>Image handling: <code>reference</code>, <code>download</code>, <code>optimize</code></td>
+              <td><code>reference</code></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>Embed Options</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Option</th>
+              <th>Description</th>
+              <th>Default</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>--embeds &lt;mode&gt;</code></td>
+              <td>Embed handling: <code>raw_html</code>, <code>shortcodes</code>, <code>placeholders</code></td>
+              <td><code>raw_html</code></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>Data Options</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Option</th>
+              <th>Description</th>
+              <th>Default</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>--supplementary</code></td>
+              <td>Convert supplementary data</td>
+              <td><code>true</code></td>
+            </tr>
+            <tr>
+              <td><code>--no-supplementary</code></td>
+              <td>Skip supplementary data</td>
+              <td><code>false</code></td>
+            </tr>
+            <tr>
+              <td><code>--include-all</code></td>
+              <td>Include all data (sessions, IPs, blocks)</td>
+              <td><code>false</code></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h4>Other Options</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Option</th>
+              <th>Description</th>
+              <th>Default</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>--verbose</code></td>
+              <td>Verbose logging output</td>
+              <td><code>false</code></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3 id="meddler-validate"><code>meddler validate</code></h3>
+        <p>Validate a Medium export without converting.</p>
+        <pre><code class="language-bash">meddler validate &lt;input-path&gt;</code></pre>
+
+        <h3 id="meddler-info"><code>meddler info</code></h3>
+        <p>Show information about a Medium export.</p>
+        <pre><code class="language-bash">meddler info &lt;input-path&gt;</code></pre>
+
+        <h2 id="target-ssg-presets">Target SSG Presets</h2>
+        <p>Each SSG target applies specific defaults optimized for that platform.</p>
+
+        <h3>Hugo</h3>
+        <pre><code class="language-bash">meddler convert export.zip --target hugo</code></pre>
+        <p><strong>Applied defaults:</strong></p>
+        <ul>
+          <li>Front matter: <code>toml</code> (Hugo's preferred format)</li>
+          <li>Embeds: <code>shortcodes</code> (Hugo shortcode format)</li>
+          <li>Output: Page bundles (<code>content/posts/slug/index.md</code>)</li>
+        </ul>
+
+        <h3>Jekyll</h3>
+        <pre><code class="language-bash">meddler convert export.zip --target jekyll</code></pre>
+        <p><strong>Applied defaults:</strong></p>
+        <ul>
+          <li>Front matter: <code>yaml</code></li>
+          <li>Output: <code>_posts/YYYY-MM-DD-slug.md</code> (date-prefixed)</li>
+          <li>Drafts: <code>_drafts/slug.md</code> (if separate)</li>
+        </ul>
+
+        <h3>Eleventy</h3>
+        <pre><code class="language-bash">meddler convert export.zip --target eleventy</code></pre>
+        <p><strong>Applied defaults:</strong></p>
+        <ul>
+          <li>Front matter: <code>yaml</code></li>
+          <li>Output: <code>posts/slug.md</code></li>
+          <li>Drafts: <code>drafts/slug.md</code> (if separate)</li>
+        </ul>
+        <p><strong>Recommended Eleventy flags:</strong></p>
+        <pre><code class="language-bash">--unquoted-dates --rewrite-image-urls --image-base-url "/images"</code></pre>
+
+        <h3>Astro</h3>
+        <pre><code class="language-bash">meddler convert export.zip --target astro</code></pre>
+        <p><strong>Applied defaults:</strong></p>
+        <ul>
+          <li>Front matter: <code>yaml</code></li>
+          <li>Output: <code>src/content/posts/slug.md</code></li>
+        </ul>
+
+        <h3>Generic</h3>
+        <pre><code class="language-bash">meddler convert export.zip --target generic</code></pre>
+        <p><strong>Applied defaults:</strong></p>
+        <ul>
+          <li>Front matter: <code>yaml</code></li>
+          <li>Output: <code>posts/slug.md</code></li>
+        </ul>
+
+        <h2 id="front-matter-formats">Front Matter Formats</h2>
+
+        <h3>YAML (Default)</h3>
+        <pre><code class="language-yaml">---
+title: "My Post"
+date: "2025-12-28T00:00:00.000Z"
+slug: my-post
+canonical_url: https://medium.com/@user/my-post
+author: Author Name
+medium_id: abc123def456
+draft: false
+tags: []
+---</code></pre>
+
+        <h3>TOML</h3>
+        <pre><code class="language-toml">+++
+title = "My Post"
+date = 2025-12-28T00:00:00.000Z
+slug = "my-post"
+canonical_url = "https://medium.com/@user/my-post"
+author = "Author Name"
+medium_id = "abc123def456"
+draft = false
+tags = []
++++</code></pre>
+
+        <h3>JSON</h3>
+        <pre><code class="language-json">{
+  "title": "My Post",
+  "date": "2025-12-28T00:00:00.000Z",
+  "slug": "my-post",
+  "canonical_url": "https://medium.com/@user/my-post",
+  "author": "Author Name",
+  "medium_id": "abc123def456",
+  "draft": false,
+  "tags": []
+}</code></pre>
+
+        <h2 id="image-handling">Image Handling</h2>
+
+        <h3>Reference Mode (Default)</h3>
+        <p>Keep Medium CDN URLs in front matter, images not downloaded:</p>
+        <pre><code class="language-yaml">image: https://cdn-images-1.medium.com/max/2560/1*abc123.jpeg</code></pre>
+
+        <h3>Download Mode</h3>
+        <p>Download all images locally:</p>
+        <pre><code class="language-bash">meddler convert export.zip --images download</code></pre>
+        <ul>
+          <li>Images saved to <code>images/&lt;slug&gt;/</code> directory</li>
+          <li>Front matter still references CDN URLs</li>
+          <li>Markdown uses local paths: <code>![](images/&lt;slug&gt;/filename.jpg)</code></li>
+        </ul>
+
+        <h3>Optimize Mode</h3>
+        <p>Download and optimize images (requires external tools):</p>
+        <pre><code class="language-bash">meddler convert export.zip --images optimize</code></pre>
+
+        <h2 id="date-formats">Date Formats</h2>
+        <p>Control how dates are formatted in front matter:</p>
+        <table>
+          <thead>
+            <tr>
+              <th>Format</th>
+              <th>Example</th>
+              <th>Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>iso8601</code></td>
+              <td><code>2025-12-28T14:30:00.000Z</code></td>
+              <td>ISO 8601 with time</td>
+            </tr>
+            <tr>
+              <td><code>yyyy-mm-dd</code></td>
+              <td><code>2025-12-28</code></td>
+              <td>Date only</td>
+            </tr>
+            <tr>
+              <td><code>unix</code></td>
+              <td><code>1735398600</code></td>
+              <td>Unix timestamp</td>
+            </tr>
+          </tbody>
+        </table>
+        <pre><code class="language-bash">meddler convert export.zip --format yaml --frontMatter.dateFormat yyyy-mm-dd</code></pre>
+
+        <h2 id="advanced-configuration">Advanced Configuration</h2>
+
+        <h3>Configuration File</h3>
+        <p>Create <code>.meddlerrc.json</code> in your project root:</p>
+        <pre><code class="language-json">{
+  "format": "yaml",
+  "target": "eleventy",
+  "outputFormat": "markdown",
+  "includeDrafts": true,
+  "includeResponses": false,
+  "separateDrafts": true,
+  "frontMatter": {
+    "extraFields": {
+      "category": "blog",
+      "lang": "en"
+    },
+    "dateFormat": "iso8601",
+    "injectEarnings": false,
+    "unquotedDates": false,
+    "rewriteImageUrls": false,
+    "imageBaseUrl": "/images"
+  },
+  "images": {
+    "mode": "download",
+    "outputDir": "assets/images",
+    "perPostDirs": true,
+    "extractFeatured": true,
+    "removeFeaturedFromBody": false
+  },
+  "embeds": {
+    "mode": "shortcodes",
+    "shortcodeFormat": "hugo"
+  },
+  "content": {
+    "sectionBreaks": "hr",
+    "dropCaps": "strip"
+  },
+  "supplementary": {
+    "bookmarks": true,
+    "claps": true,
+    "highlights": true,
+    "interests": true,
+    "lists": true,
+    "earnings": true,
+    "socialGraph": true,
+    "profile": true,
+    "blogrollFormat": "opml"
+  }
+}</code></pre>
+
+        <h3>Extra Front Matter Fields</h3>
+        <p>Add custom fields to all posts:</p>
+        <pre><code class="language-bash">meddler convert export.zip --extraFields category:blog --extraFields lang:en</code></pre>
+
+        <h2 id="troubleshooting">Troubleshooting</h2>
+
+        <h3>Common Issues</h3>
+        <p><strong>Export not found:</strong></p>
+        <pre><code class="language-bash">meddler validate path/to/export</code></pre>
+
+        <p><strong>Images not downloading:</strong></p>
+        <ul>
+          <li>Check internet connection</li>
+          <li>Verify Medium CDN URLs are accessible</li>
+          <li>Try <code>--verbose</code> for detailed error messages</li>
+        </ul>
+
+        <p><strong>Date parsing issues:</strong></p>
+        <ul>
+          <li>Use <code>--unquoted-dates</code> for Eleventy</li>
+          <li>Check <code>--frontMatter.dateFormat</code> setting</li>
+        </ul>
+
+        <p><strong>Permission denied:</strong></p>
+        <ul>
+          <li>Check output directory permissions</li>
+          <li>Use <code>sudo</code> only if necessary</li>
+        </ul>
+
+        <h3>Verbose Output</h3>
+        <p>Get detailed conversion information:</p>
+        <pre><code class="language-bash">meddler convert export.zip --verbose</code></pre>
+        <p>Shows:</p>
+        <ul>
+          <li>Files being processed</li>
+          <li>Image download status</li>
+          <li>Warnings and errors</li>
+          <li>Conversion statistics</li>
+        </ul>
+
+        <h2 id="examples">Examples</h2>
+
+        <h3>Basic Blog Migration</h3>
+        <pre><code class="language-bash">meddler convert medium-export.zip \
+  --target jekyll \
+  --output my-blog \
+  --images download</code></pre>
+
+        <h3>Eleventy Setup</h3>
+        <pre><code class="language-bash">meddler convert medium-export.zip \
+  --target eleventy \
+  --unquoted-dates \
+  --rewrite-image-urls \
+  --image-base-url "/assets/images" \
+  --images download \
+  --earnings</code></pre>
+
+        <h3>Hugo with Custom Fields</h3>
+        <pre><code class="language-bash">meddler convert medium-export.zip \
+  --target hugo \
+  --extraFields category:tech \
+  --extraFields featured:true \
+  --frontMatter.dateFormat yyyy-mm-dd</code></pre>
+
+        <h3>Minimal Export</h3>
+        <pre><code class="language-bash">meddler convert medium-export.zip \
+  --format none \
+  --no-supplementary \
+  --no-drafts</code></pre>
+
+        <h2 id="tips">Tips</h2>
+        <ol>
+          <li><strong>Always validate first</strong>: Run <code>meddler validate</code> before converting</li>
+          <li><strong>Use dry-run</strong>: Test options with <code>--dry-run</code> before full conversion</li>
+          <li><strong>Preserve original</strong>: Keep your Medium export as backup</li>
+          <li><strong>Check output</strong>: Verify converted files look as expected</li>
+          <li><strong>Iterate</strong>: Adjust options and re-run as needed</li>
+        </ol>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // Dark mode toggle
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const html = document.documentElement;
+    
+    // Check for saved preference or system preference
+    if (localStorage.getItem('darkMode') === 'true' || 
+        (!localStorage.getItem('darkMode') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+      html.classList.add('dark');
+    }
+    
+    darkModeToggle.addEventListener('click', () => {
+      html.classList.toggle('dark');
+      localStorage.setItem('darkMode', html.classList.contains('dark'));
+    });
+    
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+    
+    // Update active nav link on scroll
+    const sections = document.querySelectorAll('main h2[id], main h3[id]');
+    const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+    
+    function updateActiveNavLink() {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (pageYOffset >= sectionTop - 100) {
+          current = section.getAttribute('id');
+        }
+      });
+      
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === '#' + current) {
+          link.classList.add('active');
+        }
+      });
+    }
+    
+    window.addEventListener('scroll', updateActiveNavLink);
+    updateActiveNavLink();
+  </script>
+</body>
+</html>
