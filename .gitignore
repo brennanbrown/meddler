@@ -3,6 +3,7 @@ dist/
 .meddler-extracted/
 meddler-output/
 medium-export*
+meddler-export*
 *.tgz
 *.tsbuildinfo
 # macOS duplicates

@@ -197,28 +197,60 @@ export function convertBody(
     });
   }
 
-  // Get inner HTML of all body sections
-  const sections = body.find('section.section--body');
+  // Extract all content from the body, handling complex layouts
   let htmlContent = '';
-
-  if (sections.length > 0) {
+  
+  // Strategy 1: Try to extract content from all .section-inner divs in order
+  const allInners = body.find('.section-inner');
+  if (allInners.length > 0) {
     const parts: string[] = [];
-    sections.each((_i: number, section: AnyNode) => {
-      // Extract inner content, unwrapping the nested divs
-      const inner = $(section).find('.section-inner');
-      if (inner.length > 0) {
-        parts.push(inner.html() || '');
-      } else {
-        const content = $(section).find('.section-content');
-        parts.push(content.html() || $(section).html() || '');
+    allInners.each((_i: number, inner: AnyNode) => {
+      const content = $(inner).html();
+      if (content && content.trim()) {
+        parts.push(content);
       }
     });
-
+    
+    // Add section breaks between different sections if requested
     const separator = config.content.sectionBreaks === 'hr' ? '<hr>' :
       config.content.sectionBreaks === 'spacing' ? '<br><br>' : '';
     htmlContent = parts.join(separator);
-  } else {
-    // Fallback: use entire body section content
+  }
+  
+  // Strategy 2: Fallback to section-based extraction
+  if (!htmlContent) {
+    const sections = body.find('section.section--body');
+    if (sections.length > 0) {
+      const parts: string[] = [];
+      sections.each((_i: number, section: AnyNode) => {
+        // Try multiple selectors to find content
+        let sectionContent = '';
+        
+        // Try .section-inner first
+        const inners = $(section).find('.section-inner');
+        if (inners.length > 0) {
+          inners.each((_j: number, inner: AnyNode) => {
+            sectionContent += $(inner).html() || '';
+          });
+        } else {
+          // Fallback to .section-content or the section itself
+          const content = $(section).find('.section-content');
+          sectionContent = content.html() || $(section).html() || '';
+        }
+        
+        if (sectionContent.trim()) {
+          parts.push(sectionContent);
+        }
+      });
+
+      const separator = config.content.sectionBreaks === 'hr' ? '<hr>' :
+        config.content.sectionBreaks === 'spacing' ? '<br><br>' : '';
+      htmlContent = parts.join(separator);
+    }
+  }
+  
+  // Strategy 3: Last resort - use entire body
+  if (!htmlContent) {
     htmlContent = body.html() || '';
   }
 
