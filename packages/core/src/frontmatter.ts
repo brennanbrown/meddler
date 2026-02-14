@@ -59,7 +59,9 @@ export function buildFrontMatterData(
 
   data.medium_id = metadata.mediumId;
   data.draft = metadata.draft;
-  data.tags = metadata.tags;
+  if (metadata.tags && metadata.tags.length > 0) {
+    data.tags = metadata.tags;
+  }
 
   if (config.images.extractFeatured && metadata.image) {
     data.image = metadata.image;
