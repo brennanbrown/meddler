@@ -108,12 +108,21 @@ export function generateFrontMatter(
 }
 
 function serializeYAML(data: Record<string, unknown>): string {
+  // Use custom schema to prevent automatic date parsing
+  const customSchema = yaml.DEFAULT_SCHEMA.extend([
+    new yaml.Type('tag:yaml.org,2002:str', {
+      kind: 'scalar',
+      construct: (data) => data,
+    }),
+  ]);
+
   const yamlStr = yaml.dump(data, {
     lineWidth: -1,
     quotingType: '"',
     forceQuotes: false,
     noRefs: true,
     sortKeys: false,
+    schema: customSchema,
   }).trim();
 
   return `---\n${yamlStr}\n---`;
