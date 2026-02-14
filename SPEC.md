@@ -142,7 +142,7 @@ canonical_url: https://medium.com/@brennanbrown/being-a-better-lifehacker-ece7c6
 author: Brennan Kenneth Brown
 medium_id: ece7c6688e68
 draft: false
-tags: []
+tags: []  # Note: Medium exports do not include post tags, always empty
 ---
 
 While I definitely think it's healthy for people to have dialogues...
@@ -952,7 +952,21 @@ Medium posts can have multiple `<section class="section--body">` blocks, sometim
 
 ---
 
-## 16. Glossary
+## 16. Limitations
+
+### 16.1 Medium Export Format
+
+- **Post Tags**: Medium exports do not include post-specific tags in the HTML files. The `tags` field will always be empty in the generated frontmatter.
+- **Publication Metadata**: While publication memberships are exported, the specific publication a post was published to is not included in the post metadata.
+
+### 16.2 Content Conversion
+
+- **Complex Embeds**: Some third-party embeds (e.g., custom iframes, interactive content) may not convert perfectly and are left as raw HTML.
+- **Image Alt Text**: Alt text is only extracted when provided as a caption; some images may lack proper accessibility metadata.
+
+---
+
+## 17. Glossary
 
 | Term | Definition |
 |---|---|
