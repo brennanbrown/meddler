@@ -60,6 +60,30 @@ export function createTurndownService(config: MeddlerConfig): TurndownService {
     },
   });
 
+  // Medium code blocks - ensure proper fenced code blocks
+  td.addRule('mediumCodeBlock', {
+    filter: (node) => {
+      return node.nodeName === 'PRE' &&
+        node.classList.contains('graf--pre');
+    },
+    replacement: (content, node) => {
+      const el = node as HTMLElement;
+      const codeEl = el.querySelector('code');
+      if (codeEl) {
+        // Get the code content and preserve line breaks
+        let code = codeEl.textContent || '';
+        // Convert <br> tags to newlines
+        code = code.replace(/<br\s*\/?>/gi, '\n');
+        // Remove any remaining HTML tags
+        code = code.replace(/<[^>]*>/g, '');
+        // Trim but preserve internal newlines
+        code = code.trim();
+        return `\n\`\`\`\n${code}\n\`\`\`\n`;
+      }
+      return `\n\`\`\`\n${content}\n\`\`\`\n`;
+    },
+  });
+
   // Handle embeds based on config
   addEmbedRules(td, config);
 
