@@ -64,7 +64,13 @@ export function buildFrontMatterData(
   }
 
   if (config.images.extractFeatured && metadata.image) {
-    data.image = metadata.image;
+    if (config.frontMatter.rewriteImageUrls && metadata.image.startsWith('https://cdn-images-')) {
+      // Convert Medium CDN URL to local path
+      const imageName = metadata.image.split('/').pop()?.split('?')[0] || 'image.jpg';
+      data.image = `${config.frontMatter.imageBaseUrl}/${metadata.slug}/${imageName}`;
+    } else {
+      data.image = metadata.image;
+    }
     if (metadata.imageCaption) {
       data.image_caption = metadata.imageCaption;
     }
@@ -99,17 +105,17 @@ export function generateFrontMatter(
 
   switch (config.format) {
     case 'yaml':
-      return serializeYAML(data);
+      return serializeYAML(data, config);
     case 'toml':
       return serializeTOML(data);
     case 'json':
       return serializeJSON(data);
     default:
-      return serializeYAML(data);
+      return serializeYAML(data, config);
   }
 }
 
-function serializeYAML(data: Record<string, unknown>): string {
+function serializeYAML(data: Record<string, unknown>, config: MeddlerConfig): string {
   // Use custom schema to prevent automatic date parsing
   const customSchema = yaml.DEFAULT_SCHEMA.extend([
     new yaml.Type('tag:yaml.org,2002:str', {
@@ -118,7 +124,28 @@ function serializeYAML(data: Record<string, unknown>): string {
     }),
   ]);
 
-  const yamlStr = yaml.dump(data, {
+  const yamlData = { ...data };
+  
+  // Handle unquoted dates for Eleventy compatibility
+  if (config.frontMatter.unquotedDates && 'date' in yamlData && typeof yamlData.date === 'string') {
+    // For unquoted dates, we need to use a different approach
+    const dateStr = yamlData.date;
+    delete yamlData.date;
+    
+    const yamlStr = yaml.dump(yamlData, {
+      lineWidth: -1,
+      quotingType: '"',
+      forceQuotes: false,
+      noRefs: true,
+      sortKeys: false,
+      schema: customSchema,
+    }).trim();
+    
+    // Add unquoted date manually
+    return `---\n${yamlStr}\ndate: ${dateStr}\n---`;
+  }
+
+  const yamlStr = yaml.dump(yamlData, {
     lineWidth: -1,
     quotingType: '"',
     forceQuotes: false,

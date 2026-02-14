@@ -34,6 +34,9 @@ program
   .option('--images <mode>', 'Image handling: reference, download, optimize', DEFAULT_CONFIG.images.mode)
   .option('--embeds <mode>', 'Embed handling: raw_html, shortcodes, placeholders', DEFAULT_CONFIG.embeds.mode)
   .option('--earnings', 'Inject partner program earnings into front matter')
+  .option('--unquoted-dates', 'Output dates without quotes (Eleventy compatibility)')
+  .option('--rewrite-image-urls', 'Rewrite Medium CDN URLs to local paths')
+  .option('--image-base-url <url>', 'Base URL for rewritten images (default: /images)', '/images')
   .option('--supplementary', 'Convert supplementary data (bookmarks, claps, etc.)', true)
   .option('--no-supplementary', 'Skip supplementary data conversion')
   .option('--include-all', 'Include all data including sessions, IPs, blocks')
@@ -109,6 +112,9 @@ function buildConfig(inputPath: string, options: Record<string, any>): MeddlerCo
   config.frontMatter = {
     ...DEFAULT_CONFIG.frontMatter,
     injectEarnings: options.earnings || false,
+    unquotedDates: options.unquotedDates || false,
+    rewriteImageUrls: options.rewriteImageUrls || false,
+    imageBaseUrl: options.imageBaseUrl || DEFAULT_CONFIG.frontMatter.imageBaseUrl,
   };
 
   config.includeAll = options.includeAll || false;

@@ -14,6 +14,9 @@ export interface MeddlerConfig {
     extraFields: Record<string, string>;
     dateFormat: DateFormat;
     injectEarnings: boolean;
+    unquotedDates: boolean;
+    rewriteImageUrls: boolean;
+    imageBaseUrl: string;
   };
 
   images: {
@@ -217,6 +220,9 @@ export const DEFAULT_CONFIG: MeddlerConfig = {
     extraFields: {},
     dateFormat: 'iso8601',
     injectEarnings: false,
+    unquotedDates: false,
+    rewriteImageUrls: false,
+    imageBaseUrl: '/images',
   },
 
   images: {
