@@ -13,6 +13,12 @@
   to = "/sitemap.xml"
   status = 200
 
+# Serve docs page at /docs
+[[redirects]]
+  from = "/docs"
+  to = "/docs/index.html"
+  status = 200
+
 # SPA fallback for all other routes
 [[redirects]]
   from = "/*"
