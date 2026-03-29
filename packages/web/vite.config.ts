@@ -13,4 +13,12 @@ export default defineConfig({
   define: {
     global: 'globalThis',
   },
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+        docs: path.resolve(__dirname, 'docs.html'),
+      },
+    },
+  },
 })
