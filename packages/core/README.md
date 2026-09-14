@@ -1,48 +1,35 @@
-# @berryhouse/core
+# @brennanbrown/core
 
 Core library for parsing Medium exports and converting to static site generator formats. This package contains all the conversion logic used by both the CLI and web interfaces.
 
 ## 📦 Installation
 
 ```bash
-npm install @berryhouse/core
+npm install @brennanbrown/core
 ```
 
 ## 🚀 Usage
 
 ```typescript
-import { 
-  readExport, 
-  validateExport, 
-  analyzeExport, 
-  convertExport,
-  buildConfig,
-  type MeddlerConfig 
-} from '@berryhouse/core'
+import {
+  extractMetadata,
+  convertBody,
+  generateFrontMatter,
+  DEFAULT_CONFIG,
+  type MeddlerConfig,
+} from '@brennanbrown/core'
 
-// Read and validate export
-const files = await readExport('medium-export.zip')
-const validation = validateExport(files)
-if (!validation.valid) {
-  throw new Error(validation.message)
+const config: MeddlerConfig = {
+  ...DEFAULT_CONFIG,
+  target: 'hugo',
+  format: 'toml',
 }
 
-// Analyze the export
-const analysis = analyzeExport(files)
-console.log(`Found ${analysis.posts.length} posts`)
-
-// Build configuration
-const config: MeddlerConfig = buildConfig({
-  target: 'hugo',
-  frontMatter: 'yaml',
-  format: 'markdown',
-  includeDrafts: false,
-  includeResponses: false
-})
-
-// Convert the export
-const result = await convertExport(files, config)
-console.log(`Converted ${result.posts.length} posts`)
+// For each post HTML file in the export's posts/ directory:
+const metadata = extractMetadata(html, filename)
+const { markdown, images } = convertBody(html, config, metadata.slug)
+const frontMatter = generateFrontMatter(metadata, config)
+const output = `${frontMatter}\n\n${markdown}\n`
 ```
 
 ## 🔧 API
@@ -51,360 +38,130 @@ console.log(`Converted ${result.posts.length} posts`)
 
 ```typescript
 interface MeddlerConfig {
-  target: 'hugo' | 'eleventy' | 'jekyll' | 'astro'
-  frontMatter: 'yaml' | 'toml' | 'json'
-  format: 'markdown' | 'html' | 'json'
-  outputDir?: string
-  includeDrafts?: boolean
-  includeResponses?: boolean
-  embedMode?: 'preserve' | 'clean' | 'remove'
-  imageMode?: 'download' | 'reference'
-  supplementary?: string[]
-  dateFormat?: string
-  slugFormat?: 'lowercase' | 'preserve'
-  addReadingTime?: boolean
-  addWordCount?: boolean
-  sectionBreaks?: string
-  extraFields?: Record<string, string>
-}
-
-interface ParsedPost {
-  title: string
-  slug: string
-  content: string
-  html: string
-  frontMatter: Record<string, any>
-  date: Date
-  lastModified?: Date
-  tags: string[]
-  wordCount: number
-  readingTime: number
-  isDraft: boolean
-  isResponse: boolean
-  earnings?: number
-  url?: string
-}
-
-interface ExportSummary {
-  posts: ParsedPost[]
-  author?: AuthorProfile
-  publications?: Publication[]
-  stats: {
-    totalPosts: number
-    publishedPosts: number
-    draftPosts: number
-    responsePosts: number
-    totalWords: number
-    dateRange: { earliest: Date; latest: Date }
+  input: string
+  output: string
+  format: 'yaml' | 'toml' | 'json' | 'none'
+  outputFormat: 'markdown' | 'html' | 'structured-json'
+  target: 'generic' | 'hugo' | 'eleventy' | 'jekyll' | 'astro'
+  includeDrafts: boolean
+  includeResponses: boolean
+  separateDrafts: boolean
+  frontMatter: {
+    extraFields: Record<string, string>
+    dateFormat: 'iso8601' | 'yyyy-mm-dd' | 'unix'
+    injectEarnings: boolean
+    unquotedDates: boolean
+    rewriteImageUrls: boolean
+    imageBaseUrl: string
   }
+  images: {
+    mode: 'reference' | 'download' | 'optimize'
+    outputDir: string
+    perPostDirs: boolean
+    extractFeatured: boolean
+    removeFeaturedFromBody: boolean
+  }
+  embeds: {
+    mode: 'raw_html' | 'shortcodes' | 'placeholders'
+    shortcodeFormat: SSGTarget
+  }
+  content: {
+    sectionBreaks: 'hr' | 'none' | 'spacing'
+    dropCaps: 'strip' | 'preserve'
+  }
+  supplementary: {
+    bookmarks: boolean
+    claps: boolean
+    highlights: boolean
+    interests: boolean
+    lists: boolean
+    earnings: boolean
+    socialGraph: boolean
+    profile: boolean
+    blogrollFormat: 'opml' | 'json' | 'md' | 'none'
+  }
+  includeAll: boolean
+  verbose: boolean
 }
 ```
 
-### Core Functions
+`DEFAULT_CONFIG` provides a complete default configuration — spread it and override what you need.
 
-#### `readExport(input: string | FileList): Promise<Map<string, string>>`
+### Post Parsing & Conversion
 
-Read a Medium export from a ZIP file or directory.
+#### `extractMetadata(html: string, filename: string): PostMetadata`
+
+Extract post metadata (title, slug, date, tags, draft status, featured image, Medium ID) from a single Medium post HTML file.
 
 ```typescript
-// From ZIP file
-const files = await readExport('medium-export.zip')
-
-// From FileList (browser)
-const files = await readExport(fileList)
+const metadata = extractMetadata(html, '2016-03-25_My-Post-abc123.html')
+console.log(metadata.title, metadata.slug, metadata.draft)
 ```
 
-#### `validateExport(files: Map<string, string>): { valid: boolean; message: string }`
+#### `convertBody(html: string, config: MeddlerConfig, slug: string): { markdown: string; images: ImageRef[] }`
 
-Validate that the files form a valid Medium export.
+Convert a post's HTML body to Markdown. Returns the converted body plus the list of images found (with local paths when `images.mode` is `download` or `optimize`).
+
+#### `createTurndownService(config: MeddlerConfig): TurndownService`
+
+Build the underlying Turndown instance with Meddler's rules — exposed if you want to customise conversion.
+
+### Front Matter
+
+#### `generateFrontMatter(metadata: PostMetadata, config: MeddlerConfig): string`
+
+Serialize front matter in the configured format (`yaml`/`toml`/`json`, or empty string for `none`).
+
+#### `buildFrontMatterData(metadata: PostMetadata, config: MeddlerConfig): Record<string, unknown>`
+
+Build the raw front matter object — useful if you want to add fields before serialising.
+
+#### `formatDate(dateStr: string | null, format: DateFormat): string | null`
+
+Format a date string as `iso8601`, `yyyy-mm-dd`, or `unix`.
+
+### Supplementary Data Parsers
+
+Each parser reads the corresponding HTML files from the export:
+
+| Function | Source directory |
+|----------|------------------|
+| `parseProfile(html)` | `profile/profile.html` |
+| `parseAbout(html)` | `profile/about.html` |
+| `parsePublications(html)` | `profile/publications.html` |
+| `parseBookmarks(htmlFiles)` | `bookmarks/` |
+| `parseClaps(htmlFiles)` | `claps/` |
+| `parseHighlights(htmlFiles)` | `highlights/` |
+| `parseList(html, filename)` | `lists/*.html` |
+| `parseEarnings(htmlFiles)` | `partner-program/` |
+| `parseFollowing(users, pubs, topics)` | `users-following/`, `pubs-following/`, `topics-following/` |
+| `parseInterests(files)` | `interests/` |
+
+Functions taking `htmlFiles` accept an array of HTML strings (exports paginate these files).
+
+## 🧪 Example
 
 ```typescript
-const validation = validateExport(files)
-if (!validation.valid) {
-  console.error(validation.message)
+import {
+  extractMetadata,
+  convertBody,
+  generateFrontMatter,
+  parseBookmarks,
+  DEFAULT_CONFIG,
+} from '@brennanbrown/core'
+import { readFileSync, readdirSync } from 'fs'
+import { join } from 'path'
+
+const config = { ...DEFAULT_CONFIG, target: 'jekyll' as const }
+const postsDir = 'medium-export/posts'
+
+for (const file of readdirSync(postsDir).filter(f => f.endsWith('.html'))) {
+  const html = readFileSync(join(postsDir, file), 'utf-8')
+  const metadata = extractMetadata(html, file)
+  const { markdown } = convertBody(html, config, metadata.slug)
+  const frontMatter = generateFrontMatter(metadata, config)
+  console.log(`${metadata.slug}: ${frontMatter.length + markdown.length} bytes`)
 }
-```
-
-#### `analyzeExport(files: Map<string, string>): ExportSummary`
-
-Analyze a Medium export and return summary information.
-
-```typescript
-const summary = analyzeExport(files)
-console.log(`Found ${summary.stats.totalPosts} posts`)
-console.log(`Date range: ${summary.stats.dateRange.earliest} to ${summary.stats.dateRange.latest}`)
-```
-
-#### `buildConfig(options: Partial<MeddlerConfig>): MeddlerConfig`
-
-Build a complete configuration with defaults.
-
-```typescript
-const config = buildConfig({
-  target: 'hugo',
-  includeDrafts: true
-})
-// Returns full config with Hugo defaults
-```
-
-#### `convertExport(files: Map<string, string>, config: MeddlerConfig): Promise<ConversionResult>`
-
-Convert a Medium export to static site format.
-
-```typescript
-const result = await convertExport(files, config)
-console.log(`Converted ${result.posts.length} posts`)
-console.log(`Generated ${result.files.size} files`)
-```
-
-### Parsing Functions
-
-#### `parsePost(html: string, config: MeddlerConfig): ParsedPost`
-
-Parse a single Medium post HTML.
-
-```typescript
-const post = parsePost(html, config)
-console.log(post.title)
-console.log(post.tags)
-```
-
-#### `parseProfile(html: string): AuthorProfile`
-
-Parse author profile from profile HTML.
-
-```typescript
-const author = parseProfile(html)
-console.log(author.name, author.username)
-```
-
-#### `parsePublications(html: string): Publication[]`
-
-Parse publications data.
-
-```typescript
-const publications = parsePublications(html)
-console.log(`Found ${publications.length} publications`)
-```
-
-### Front Matter Generation
-
-#### `generateFrontMatter(post: ParsedPost, config: MeddlerConfig): string`
-
-Generate front matter string in specified format.
-
-```typescript
-const yaml = generateFrontMatter(post, config)
-console.log(yaml)
-// ---
-// title: "My Post"
-// date: "2024-01-01"
-// ---
-```
-
-#### `convertBody(html: string, config: MeddlerConfig): string`
-
-Convert HTML body to specified format.
-
-```typescript
-const markdown = convertBody(html, config)
-const htmlOutput = convertBody(html, { ...config, format: 'html' })
-```
-
-### Supplementary Data
-
-#### `parseEarnings(html: string): EarningsEntry[]`
-
-Parse earnings data from partner program HTML.
-
-```typescript
-const earnings = parseEarnings(html)
-console.log(`Found earnings for ${earnings.length} posts`)
-```
-
-#### `parseBookmarks(html: string): Bookmark[]`
-
-Parse bookmark data.
-
-```typescript
-const bookmarks = parseBookmarks(html)
-console.log(`Found ${bookmarks.length} bookmarks`)
-```
-
-#### `parseClaps(html: string): ClapEntry[]`
-
-Parse clap data.
-
-```typescript
-const claps = parseClaps(html)
-console.log(`Found ${claps.length} clap entries`)
-```
-
-## 🎯 Examples
-
-### Basic Conversion
-
-```typescript
-import { readExport, validateExport, convertExport, buildConfig } from '@berryhouse/core'
-
-async function convertMediumExport(zipPath: string) {
-  // Read and validate
-  const files = await readExport(zipPath)
-  const validation = validateExport(files)
-  if (!validation.valid) {
-    throw new Error(validation.message)
-  }
-
-  // Configure
-  const config = buildConfig({
-    target: 'hugo',
-    frontMatter: 'yaml',
-    format: 'markdown',
-    includeDrafts: true
-  })
-
-  // Convert
-  const result = await convertExport(files, config)
-  return result
-}
-```
-
-### Custom Front Matter
-
-```typescript
-import { parsePost, generateFrontMatter, buildConfig } from '@berryhouse/core'
-
-const config = buildConfig({
-  target: 'hugo',
-  extraFields: {
-    author: '{{author.name}}',
-    locale: 'en-US',
-    featured: false
-  }
-})
-
-const post = parsePost(html, config)
-const frontMatter = generateFrontMatter(post, config)
-```
-
-### Analysis Only
-
-```typescript
-import { readExport, analyzeExport } from '@berryhouse/core'
-
-async function analyzeExport(zipPath: string) {
-  const files = await readExport(zipPath)
-  const summary = analyzeExport(files)
-  
-  return {
-    totalPosts: summary.stats.totalPosts,
-    publishedPosts: summary.stats.publishedPosts,
-    dateRange: summary.stats.dateRange,
-    author: summary.author?.name
-  }
-}
-```
-
-### Browser Usage
-
-```typescript
-import { readUploadedFiles, validateExport, convertExport, buildConfig } from '@berryhouse/core'
-
-async function handleFileUpload(fileList: FileList) {
-  // Read uploaded files
-  const files = await readUploadedFiles(fileList)
-  
-  // Validate
-  const validation = validateExport(files)
-  if (!validation.valid) {
-    alert(validation.message)
-    return
-  }
-
-  // Convert
-  const config = buildConfig({ target: 'hugo' })
-  const result = await convertExport(files, config)
-  
-  // Download ZIP
-  const zip = new JSZip()
-  for (const [path, content] of result.files) {
-    zip.file(path, content)
-  }
-  const blob = await zip.generateAsync({ type: 'blob' })
-  downloadBlob(blob, 'meddler-export.zip')
-}
-```
-
-## 🔧 Configuration
-
-### Presets
-
-The library includes built-in presets for popular SSGs:
-
-```typescript
-import { PRESETS } from '@berryhouse/core'
-
-// Hugo preset
-const hugoConfig = PRESETS.hugo
-
-// Eleventy preset
-const eleventyConfig = PRESETS.eleventy
-
-// Custom preset
-const customConfig = { ...PRESETS.hugo, includeDrafts: true }
-```
-
-### Date Formats
-
-Use any valid date format string:
-
-```typescript
-const config = buildConfig({
-  dateFormat: 'YYYY-MM-DD'  // 2024-01-01
-  // or
-  dateFormat: '2006-01-02'  // 2006-01-02 (Hugo)
-  // or
-  dateFormat: 'MMMM DD, YYYY'  // January 01, 2024
-})
-```
-
-### Field Templates
-
-Use template variables in `extraFields`:
-
-```typescript
-const config = buildConfig({
-  extraFields: {
-    author: '{{author.name}}',
-    username: '{{author.username}}',
-    url: '{{url}}',
-    wordCount: '{{wordCount}}',
-    readingTime: '{{readingTime}}'
-  }
-})
-```
-
-## 🧪 Testing
-
-```typescript
-import { validateExport, analyzeExport } from '@berryhouse/core'
-
-describe('Export Analysis', () => {
-  it('should validate a correct export', () => {
-    const files = new Map([
-      ['README.html', '...'],
-      ['posts/post1.html', '...']
-    ])
-    
-    const validation = validateExport(files)
-    expect(validation.valid).toBe(true)
-  })
-
-  it('should analyze export statistics', () => {
-    const summary = analyzeExport(files)
-    expect(summary.stats.totalPosts).toBeGreaterThan(0)
-  })
-})
 ```
 
 ## 📄 License
