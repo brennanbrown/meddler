@@ -18,7 +18,7 @@ import {
   DEFAULT_CONFIG as CORE_DEFAULTS,
   PostMetadata,
   ImageRef,
-} from '@berryhouse/core'
+} from '@brennanbrown/core'
 import type { ParsedPost, ExportSummary, ConfigState, ConversionProgress, LogEntry } from './store'
 
 /**
@@ -211,6 +211,7 @@ function buildCoreConfig(config: ConfigState): MeddlerConfig {
     includeResponses: config.includeResponses,
     separateDrafts: config.separateDrafts,
     frontMatter: {
+      ...CORE_DEFAULTS.frontMatter,
       extraFields: Object.fromEntries(config.extraFields.filter(f => f.key).map(f => [f.key, f.value])),
       dateFormat: config.dateFormat,
       injectEarnings: config.injectEarnings,

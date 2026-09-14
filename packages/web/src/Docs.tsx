@@ -15,14 +15,11 @@ SyntaxHighlighter.registerLanguage('toml', toml)
 const NAV_ITEMS = [
   { id: 'quick-start', label: 'Quick Start', depth: 0 },
   { id: 'command-reference', label: 'Command Reference', depth: 0 },
-  { id: 'meddler-convert', label: 'convert', depth: 1 },
-  { id: 'meddler-validate', label: 'validate', depth: 1 },
-  { id: 'meddler-info', label: 'info', depth: 1 },
-  { id: 'target-ssg-presets', label: 'SSG Presets', depth: 0 },
+  { id: 'usage', label: 'usage', depth: 1 },
+  { id: 'target-ssg-presets', label: 'SSG Targets', depth: 0 },
   { id: 'front-matter-formats', label: 'Front Matter', depth: 0 },
   { id: 'image-handling', label: 'Images', depth: 0 },
   { id: 'date-formats', label: 'Dates', depth: 0 },
-  { id: 'advanced-configuration', label: 'Advanced', depth: 0 },
   { id: 'troubleshooting', label: 'Troubleshooting', depth: 0 },
   { id: 'examples', label: 'Examples', depth: 0 },
   { id: 'tips', label: 'Tips', depth: 0 },
@@ -280,10 +277,10 @@ export default function Docs() {
               {/* Quick Start */}
               <SectionHeading id="quick-start" level={2}>Quick Start</SectionHeading>
               <Code lang="bash">{`# Basic conversion
-meddler convert export.zip
+meddler export.zip
 
 # Advanced Eleventy setup
-meddler convert export.zip \\
+meddler export.zip \\
   --target eleventy \\
   --format yaml \\
   --images download \\
@@ -293,9 +290,9 @@ meddler convert export.zip \\
               {/* Command Reference */}
               <SectionHeading id="command-reference" level={2}>Command Reference</SectionHeading>
 
-              <SectionHeading id="meddler-convert" level={3}><InlineCode>meddler convert</InlineCode></SectionHeading>
-              <p className="mb-4 text-zinc-600 dark:text-zinc-400">Convert a Medium export to static site generator formats.</p>
-              <Code lang="bash">meddler convert &lt;input-path&gt; [options]</Code>
+              <SectionHeading id="usage" level={3}><InlineCode>meddler</InlineCode></SectionHeading>
+              <p className="mb-4 text-zinc-600 dark:text-zinc-400">Convert a Medium export to static site generator formats. The export is validated automatically before conversion.</p>
+              <Code lang="bash">meddler &lt;input-path&gt; [options]</Code>
 
               <SectionHeading id="convert-arguments" level={4}>Arguments</SectionHeading>
               <ul className="mb-5 space-y-1 text-zinc-600 dark:text-zinc-400">
@@ -366,23 +363,20 @@ meddler convert export.zip \\
                 headers={['Option', 'Description', 'Default']}
                 rows={[
                   [<InlineCode>--verbose</InlineCode>, 'Verbose logging output', <InlineCode>false</InlineCode>],
+                  [<InlineCode>-h, --help</InlineCode>, 'Show help', '—'],
+                  [<InlineCode>-V, --version</InlineCode>, 'Show version', '—'],
                 ]}
               />
+              <p className="mb-4 text-zinc-600 dark:text-zinc-400">
+                Validation runs automatically on every invocation — Meddler checks the export structure and reports the number of published posts and drafts before converting. Use <InlineCode>--dry-run</InlineCode> to preview a conversion without writing any files.
+              </p>
 
-              <SectionHeading id="meddler-validate" level={3}><InlineCode>meddler validate</InlineCode></SectionHeading>
-              <p className="mb-4 text-zinc-600 dark:text-zinc-400">Validate a Medium export without converting.</p>
-              <Code lang="bash">meddler validate &lt;input-path&gt;</Code>
-
-              <SectionHeading id="meddler-info" level={3}><InlineCode>meddler info</InlineCode></SectionHeading>
-              <p className="mb-4 text-zinc-600 dark:text-zinc-400">Show information about a Medium export.</p>
-              <Code lang="bash">meddler info &lt;input-path&gt;</Code>
-
-              {/* SSG Presets */}
-              <SectionHeading id="target-ssg-presets" level={2}>Target SSG Presets</SectionHeading>
+              {/* SSG Targets */}
+              <SectionHeading id="target-ssg-presets" level={2}>Target SSGs</SectionHeading>
               <p className="mb-5 text-zinc-600 dark:text-zinc-400">Each SSG target applies specific defaults optimised for that platform.</p>
 
               <SectionHeading id="preset-hugo" level={3}>Hugo</SectionHeading>
-              <Code lang="bash">meddler convert export.zip --target hugo</Code>
+              <Code lang="bash">meddler export.zip --target hugo</Code>
               <ul className="mb-5 space-y-1.5 text-zinc-600 dark:text-zinc-400">
                 <li>Front matter: <InlineCode>toml</InlineCode> (Hugo's preferred format)</li>
                 <li>Embeds: <InlineCode>shortcodes</InlineCode> (Hugo shortcode format)</li>
@@ -390,7 +384,7 @@ meddler convert export.zip \\
               </ul>
 
               <SectionHeading id="preset-jekyll" level={3}>Jekyll</SectionHeading>
-              <Code lang="bash">meddler convert export.zip --target jekyll</Code>
+              <Code lang="bash">meddler export.zip --target jekyll</Code>
               <ul className="mb-5 space-y-1.5 text-zinc-600 dark:text-zinc-400">
                 <li>Front matter: <InlineCode>yaml</InlineCode></li>
                 <li>Output: <InlineCode>_posts/YYYY-MM-DD-slug.md</InlineCode> (date-prefixed)</li>
@@ -398,7 +392,7 @@ meddler convert export.zip \\
               </ul>
 
               <SectionHeading id="preset-eleventy" level={3}>Eleventy</SectionHeading>
-              <Code lang="bash">meddler convert export.zip --target eleventy</Code>
+              <Code lang="bash">meddler export.zip --target eleventy</Code>
               <ul className="mb-5 space-y-1.5 text-zinc-600 dark:text-zinc-400">
                 <li>Front matter: <InlineCode>yaml</InlineCode></li>
                 <li>Output: <InlineCode>posts/slug.md</InlineCode></li>
@@ -408,14 +402,14 @@ meddler convert export.zip \\
               <Code lang="bash">--unquoted-dates --rewrite-image-urls --image-base-url "/images"</Code>
 
               <SectionHeading id="preset-astro" level={3}>Astro</SectionHeading>
-              <Code lang="bash">meddler convert export.zip --target astro</Code>
+              <Code lang="bash">meddler export.zip --target astro</Code>
               <ul className="mb-5 space-y-1.5 text-zinc-600 dark:text-zinc-400">
                 <li>Front matter: <InlineCode>yaml</InlineCode></li>
                 <li>Output: <InlineCode>src/content/posts/slug.md</InlineCode></li>
               </ul>
 
-              <SectionHeading id="preset-generic" level={3}>Generic</SectionHeading>
-              <Code lang="bash">meddler convert export.zip --target generic</Code>
+              <SectionHeading id="preset-generic" level={3}>Generic (Default)</SectionHeading>
+              <Code lang="bash">meddler export.zip</Code>
               <ul className="mb-5 space-y-1.5 text-zinc-600 dark:text-zinc-400">
                 <li>Front matter: <InlineCode>yaml</InlineCode></li>
                 <li>Output: <InlineCode>posts/slug.md</InlineCode></li>
@@ -469,7 +463,7 @@ tags = []
 
               <SectionHeading id="img-download" level={3}>Download Mode</SectionHeading>
               <p className="mb-3 text-zinc-600 dark:text-zinc-400">Download all images locally.</p>
-              <Code lang="bash">meddler convert export.zip --images download</Code>
+              <Code lang="bash">meddler export.zip --images download</Code>
               <ul className="mb-5 space-y-1.5 text-zinc-600 dark:text-zinc-400">
                 <li>Images saved to <InlineCode>images/&lt;slug&gt;/</InlineCode></li>
                 <li>Front matter still references CDN URLs</li>
@@ -478,75 +472,14 @@ tags = []
 
               <SectionHeading id="img-optimize" level={3}>Optimize Mode</SectionHeading>
               <p className="mb-3 text-zinc-600 dark:text-zinc-400">Download and optimise images (requires external tools).</p>
-              <Code lang="bash">meddler convert export.zip --images optimize</Code>
+              <Code lang="bash">meddler export.zip --images optimize</Code>
 
               {/* Date Formats */}
               <SectionHeading id="date-formats" level={2}>Date Formats</SectionHeading>
-              <p className="mb-4 text-zinc-600 dark:text-zinc-400">Control how dates are formatted in front matter:</p>
-              <Table
-                headers={['Format', 'Example', 'Description']}
-                rows={[
-                  [<InlineCode>iso8601</InlineCode>, <InlineCode>2025-12-28T14:30:00.000Z</InlineCode>, 'ISO 8601 with time'],
-                  [<InlineCode>yyyy-mm-dd</InlineCode>, <InlineCode>2025-12-28</InlineCode>, 'Date only'],
-                  [<InlineCode>unix</InlineCode>, <InlineCode>1735398600</InlineCode>, 'Unix timestamp'],
-                ]}
-              />
-              <Code lang="bash">meddler convert export.zip --format yaml --frontMatter.dateFormat yyyy-mm-dd</Code>
-
-              {/* Advanced Configuration */}
-              <SectionHeading id="advanced-configuration" level={2}>Advanced Configuration</SectionHeading>
-
-              <SectionHeading id="config-file" level={3}>Configuration File</SectionHeading>
-              <p className="mb-3 text-zinc-600 dark:text-zinc-400">Create <InlineCode>.meddlerrc.json</InlineCode> in your project root:</p>
-              <Code lang="json">{`{
-  "format": "yaml",
-  "target": "eleventy",
-  "outputFormat": "markdown",
-  "includeDrafts": true,
-  "includeResponses": false,
-  "separateDrafts": true,
-  "frontMatter": {
-    "extraFields": {
-      "category": "blog",
-      "lang": "en"
-    },
-    "dateFormat": "iso8601",
-    "injectEarnings": false,
-    "unquotedDates": false,
-    "rewriteImageUrls": false,
-    "imageBaseUrl": "/images"
-  },
-  "images": {
-    "mode": "download",
-    "outputDir": "assets/images",
-    "perPostDirs": true,
-    "extractFeatured": true,
-    "removeFeaturedFromBody": false
-  },
-  "embeds": {
-    "mode": "shortcodes",
-    "shortcodeFormat": "hugo"
-  },
-  "content": {
-    "sectionBreaks": "hr",
-    "dropCaps": "strip"
-  },
-  "supplementary": {
-    "bookmarks": true,
-    "claps": true,
-    "highlights": true,
-    "interests": true,
-    "lists": true,
-    "earnings": true,
-    "socialGraph": true,
-    "profile": true,
-    "blogrollFormat": "opml"
-  }
-}`}</Code>
-
-              <SectionHeading id="extra-fields" level={3}>Extra Front Matter Fields</SectionHeading>
-              <p className="mb-3 text-zinc-600 dark:text-zinc-400">Add custom fields to all posts:</p>
-              <Code lang="bash">meddler convert export.zip --extraFields category:blog --extraFields lang:en</Code>
+              <p className="mb-4 text-zinc-600 dark:text-zinc-400">
+                Dates are written in ISO 8601 format (e.g. <InlineCode>2025-12-28T14:30:00.000Z</InlineCode>). In YAML output they are quoted by default to prevent auto-parsing — use <InlineCode>--unquoted-dates</InlineCode> to emit them bare for Eleventy compatibility.
+              </p>
+              <Code lang="bash">meddler export.zip --target eleventy --unquoted-dates</Code>
 
               {/* Troubleshooting */}
               <SectionHeading id="troubleshooting" level={2}>Troubleshooting</SectionHeading>
@@ -556,7 +489,7 @@ tags = []
               <div className="space-y-4 mb-6">
                 <div className="rounded-xl border border-zinc-200 dark:border-zinc-700 p-4">
                   <p className="font-semibold text-zinc-800 dark:text-zinc-200 mb-2">Export not found</p>
-                  <Code lang="bash">meddler validate path/to/export</Code>
+                  <Code lang="bash">meddler path/to/export --dry-run</Code>
                 </div>
                 <div className="rounded-xl border border-zinc-200 dark:border-zinc-700 p-4">
                   <p className="font-semibold text-zinc-800 dark:text-zinc-200 mb-2">Images not downloading</p>
@@ -570,7 +503,7 @@ tags = []
                   <p className="font-semibold text-zinc-800 dark:text-zinc-200 mb-2">Date parsing issues</p>
                   <ul className="space-y-1 text-zinc-600 dark:text-zinc-400 text-sm">
                     <li>Use <InlineCode>--unquoted-dates</InlineCode> for Eleventy</li>
-                    <li>Check <InlineCode>--frontMatter.dateFormat</InlineCode> setting</li>
+                    <li>Dates are emitted as ISO 8601 — check your SSG's date parsing</li>
                   </ul>
                 </div>
                 <div className="rounded-xl border border-zinc-200 dark:border-zinc-700 p-4">
@@ -584,7 +517,7 @@ tags = []
 
               <SectionHeading id="verbose-output" level={3}>Verbose Output</SectionHeading>
               <p className="mb-3 text-zinc-600 dark:text-zinc-400">Get detailed conversion information:</p>
-              <Code lang="bash">meddler convert export.zip --verbose</Code>
+              <Code lang="bash">meddler export.zip --verbose</Code>
               <ul className="mb-5 space-y-1.5 text-zinc-600 dark:text-zinc-400">
                 <li>Files being processed</li>
                 <li>Image download status</li>
@@ -596,13 +529,13 @@ tags = []
               <SectionHeading id="examples" level={2}>Examples</SectionHeading>
 
               <SectionHeading id="ex-blog" level={3}>Basic Blog Migration</SectionHeading>
-              <Code lang="bash">{`meddler convert medium-export.zip \\
+              <Code lang="bash">{`meddler medium-export.zip \\
   --target jekyll \\
   --output my-blog \\
   --images download`}</Code>
 
               <SectionHeading id="ex-eleventy" level={3}>Eleventy Setup</SectionHeading>
-              <Code lang="bash">{`meddler convert medium-export.zip \\
+              <Code lang="bash">{`meddler medium-export.zip \\
   --target eleventy \\
   --unquoted-dates \\
   --rewrite-image-urls \\
@@ -610,15 +543,14 @@ tags = []
   --images download \\
   --earnings`}</Code>
 
-              <SectionHeading id="ex-hugo" level={3}>Hugo with Custom Fields</SectionHeading>
-              <Code lang="bash">{`meddler convert medium-export.zip \\
+              <SectionHeading id="ex-hugo" level={3}>Hugo with Embeds</SectionHeading>
+              <Code lang="bash">{`meddler medium-export.zip \\
   --target hugo \\
-  --extraFields category:tech \\
-  --extraFields featured:true \\
-  --frontMatter.dateFormat yyyy-mm-dd`}</Code>
+  --embeds shortcodes \\
+  --images download`}</Code>
 
               <SectionHeading id="ex-minimal" level={3}>Minimal Export</SectionHeading>
-              <Code lang="bash">{`meddler convert medium-export.zip \\
+              <Code lang="bash">{`meddler medium-export.zip \\
   --format none \\
   --no-supplementary \\
   --no-drafts`}</Code>
@@ -627,7 +559,7 @@ tags = []
               <SectionHeading id="tips" level={2}>Tips</SectionHeading>
               <ol className="space-y-3 mb-8">
                 {[
-                  ['Always validate first', <>Run <InlineCode>meddler validate</InlineCode> before converting</>],
+                  ['Preview first', <>Meddler validates the export automatically — use <InlineCode>--dry-run</InlineCode> to preview output</>],
                   ['Use dry-run', <>Test options with <InlineCode>--dry-run</InlineCode> before full conversion</>],
                   ['Preserve original', 'Keep your Medium export as a backup'],
                   ['Check output', 'Verify converted files look as expected'],

@@ -7,7 +7,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': '/src',
-      '@berryhouse/core': path.resolve(__dirname, '../core/src/index.ts'),
+      '@brennanbrown/core': path.resolve(__dirname, '../core/src/index.ts'),
     },
   },
   define: {
