@@ -49,8 +49,8 @@ meddler/
 
 ### Packages
 
-- **@berryhouse/core**: Core parsing and conversion logic
-- **@berryhouse/meddler**: CLI tool
+- **@brennanbrown/core**: Core parsing and conversion logic
+- **@brennanbrown/meddler**: CLI tool
 - **meddler-cli**: Unscoped wrapper for easy installation
 - **@meddler/web**: Web interface (private, not published)
 
@@ -215,7 +215,7 @@ npm test -w packages/core
 
 ### Writing Tests
 
-- Test core functionality in `@berryhouse/core`
+- Test core functionality in `@brennanbrown/core`
 - Test CLI commands and options
 - Test edge cases and error conditions
 - Keep tests focused and fast

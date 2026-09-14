@@ -17,7 +17,7 @@ Meddler helps you reclaim your content from Medium and convert it to static site
 ## Features
 
 - **Multiple Output Formats**: Markdown, HTML, JSON
-- **SSG Support**: Hugo, Eleventy, Jekyll, Astro with automatic presets
+- **SSG Support**: Hugo, Eleventy, Jekyll, Astro with per-target defaults
 - **Rich Front Matter**: YAML, TOML, or JSON with comprehensive metadata
 - **Content Options**: Preserve or remove images, embeds, footnotes
 - **Supplementary Data**: Export profile, publications, lists, bookmarks, claps, earnings
@@ -41,22 +41,21 @@ Visit [meddler.fyi](https://meddler.fyi) to use the web version directly in your
 ### CLI
 
 ```bash
-# Convert with default settings (Hugo + YAML + Markdown)
-meddler convert medium-export.zip
+# Convert with default settings (generic target + YAML + Markdown)
+meddler medium-export.zip
 
 # Specify output directory
-meddler convert medium-export.zip -o my-site
+meddler medium-export.zip -o my-site
 
-# Use Eleventy preset
-meddler convert medium-export.zip --preset eleventy
+# Target Eleventy
+meddler medium-export.zip --target eleventy
 
 # Custom configuration
-meddler convert medium-export.zip \
-  --front-matter toml \
+meddler medium-export.zip \
+  --format toml \
   --target astro \
-  --format html \
-  --include-drafts \
-  --include-responses
+  --output-format html \
+  --responses
 ```
 
 ### Web
@@ -77,11 +76,9 @@ meddler convert medium-export.zip \
 
 ### Metadata
 - ✅ Title, subtitle, slug
-- ✅ Publication date and last modified
+- ✅ Publication date
 - ✅ Tags and topics
-- ✅ Reading time
-- ✅ Word count
-- ✅ Earnings data (from Partner Program)
+- ✅ Earnings data (from Partner Program, opt-in)
 - ✅ Author information
 
 ### Supplementary Data
@@ -126,14 +123,15 @@ earnings = 12.34
 }
 ```
 
-### SSG Presets
+### SSG Targets
 
-| SSG | Front Matter | Date Format | Content Dir | Notes |
-|-----|--------------|-------------|-------------|-------|
-| Hugo | YAML | `2006-01-02` | `content/posts` | Default |
-| Eleventy | YAML | `YYYY-MM-DD` | `posts` | |
-| Jekyll | YAML | `YYYY-MM-DD` | `_posts` | |
-| Astro | YAML | `YYYY-MM-DD` | `src/content/blog` | |
+| SSG | Front Matter | Content Dir | Notes |
+|-----|--------------|-------------|-------|
+| Generic | YAML | `posts/` | Default |
+| Hugo | TOML | `content/posts/<slug>/index.md` | Page bundles, shortcode embeds |
+| Eleventy | YAML | `posts/` | Pair with `--unquoted-dates` |
+| Jekyll | YAML | `_posts/YYYY-MM-DD-slug.md` | Drafts go to `_drafts/` |
+| Astro | YAML | `src/content/posts/` | |
 
 ## Advanced Options
 
@@ -141,53 +139,33 @@ earnings = 12.34
 
 ```bash
 # Output format
---format markdown|html|json
+--output-format markdown|html|structured-json
 
 # Front matter
---front-matter yaml|toml|json
+--format yaml|toml|json|none
 
 # Target SSG
---target hugo|eleventy|jekyll|astro
+--target generic|hugo|eleventy|jekyll|astro
 
 # Content filtering
---include-drafts      # Include draft posts
---include-responses   # Include response posts
---exclude-images       # Don't process images
---embed-mode preserve|clean|remove
+--no-drafts            # Exclude draft posts (included by default)
+--responses            # Include response posts
+--images reference|download|optimize
+--embeds raw_html|shortcodes|placeholders
 
 # Supplementary data
---supplementary all|profile|publications|lists|bookmarks|claps|earnings|none
+--no-supplementary     # Skip bookmarks, claps, profile, etc.
+--include-all          # Include sessions, IPs, blocks
 
-# Advanced
---date-format "YYYY-MM-DD"
---slug-format "lowercase"
---add-reading-time
---add-word-count
---section-breaks "###"
-```
+# Front matter extras
+--earnings             # Inject Partner Program earnings
+--unquoted-dates       # Bare dates for Eleventy
+--rewrite-image-urls   # Rewrite Medium CDN URLs to local paths
+--image-base-url /images
 
-### Configuration File
-
-Create `.meddlerrc.json` in your project:
-
-```json
-{
-  "frontMatter": "yaml",
-  "target": "hugo",
-  "format": "markdown",
-  "includeDrafts": true,
-  "includeResponses": false,
-  "embedMode": "preserve",
-  "supplementary": ["profile", "earnings"],
-  "dateFormat": "2006-01-02",
-  "addReadingTime": true,
-  "addWordCount": true,
-  "imageMode": "download",
-  "extraFields": {
-    "author": "{{author.name}}",
-    "locale": "en-US"
-  }
-}
+# Utility
+--dry-run
+--verbose
 ```
 
 ## Web Interface
@@ -203,21 +181,28 @@ All processing happens in your browser - your files never leave your device.
 
 ## Output Structure
 
+For the default `generic` target (other targets use their conventional layouts):
+
 ```
-output/
-├── content/
-│   ├── posts/
-│   │   ├── 2024-01-01_my-post.md
-│   │   └── 2024-01-02-another-post.md
-│   └── drafts/
-│       └── draft-post.md
+meddler-output/
+├── posts/
+│   ├── my-post.md
+│   └── another-post.md
+├── drafts/
+│   └── draft-post.md
 ├── data/
 │   ├── author.json
 │   ├── publications.json
-│   └── earnings.json
-└── images/
-    ├── image1.jpg
-    └── image2.png
+│   ├── bookmarks.json
+│   ├── claps.json
+│   ├── highlights.json
+│   ├── interests.json
+│   ├── earnings.json
+│   ├── following.json
+│   └── lists/
+├── images/
+│   └── <slug>/
+└── meddler-report.json
 ```
 
 ## Development

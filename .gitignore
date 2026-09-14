@@ -41,6 +41,7 @@ coverage/
 meddler-output/
 medium-export*
 meddler-export*
+archive-test
 
 # Editors / IDEs
 .vscode/
