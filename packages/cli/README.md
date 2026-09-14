@@ -1,4 +1,4 @@
-# @berryhouse/meddler
+# @brennanbrown/meddler
 
 ![Meddler Screenshot](../../screenshot.jpg)
 
@@ -11,274 +11,146 @@ Command-line interface for converting Medium exports to static site generator fo
 npm install -g meddler-cli
 
 # Or install the scoped package directly
-npm install -g @berryhouse/meddler
+npm install -g @brennanbrown/meddler
 ```
 
 ## Usage
 
+```bash
+meddler <input-path> [options]
+```
+
+`<input-path>` can be a Medium export `.zip` file or an already-extracted export directory. Meddler validates the export automatically before converting.
+
 ### Basic Conversion
 
 ```bash
-# Convert with default settings (Hugo + YAML + Markdown)
-meddler convert medium-export.zip
+# Convert with default settings (generic target + YAML front matter + Markdown)
+meddler medium-export.zip
 
 # Specify output directory
-meddler convert medium-export.zip -o my-site
+meddler medium-export.zip -o my-site
 
-# Convert a folder (unzipped export)
-meddler convert /path/to/medium-export/
+# Convert an unzipped export folder
+meddler /path/to/medium-export/
+
+# Preview without writing any files
+meddler medium-export.zip --dry-run
 ```
 
-### Presets
+### SSG Targets
 
 ```bash
-# Use specific SSG presets
-meddler convert medium-export.zip --preset hugo      # Default
-meddler convert medium-export.zip --preset eleventy
-meddler convert medium-export.zip --preset jekyll
-meddler convert medium-export.zip --preset astro
+meddler medium-export.zip --target hugo
+meddler medium-export.zip --target eleventy
+meddler medium-export.zip --target jekyll
+meddler medium-export.zip --target astro
+meddler medium-export.zip --target generic   # Default
 ```
 
-### Advanced Options
+Each target applies sensible defaults (e.g. Hugo switches to TOML front matter and shortcode embeds) and uses a conventional directory layout for that SSG.
 
-```bash
-meddler convert medium-export.zip \
-  --front-matter toml \
-  --target astro \
-  --format html \
-  --include-drafts \
-  --include-responses \
-  --embed-mode clean \
-  --supplementary all \
-  --date-format "YYYY-MM-DD" \
-  --add-reading-time \
-  --add-word-count
-```
-
-## Commands
-
-### `convert`
-
-Convert a Medium export to static site format.
-
-```bash
-meddler convert <input> [options]
-```
-
-**Arguments:**
-- `<input>` - Path to Medium export ZIP file or directory
-
-**Options:**
+## Options
 
 | Option | Default | Description |
 |--------|---------|-------------|
-| `-o, --output` | `meddler-output` | Output directory |
-| `--format` | `markdown` | Output format: `markdown`, `html`, `json` |
-| `--front-matter` | `yaml` | Front matter format: `yaml`, `toml`, `json` |
-| `--target` | `hugo` | Target SSG: `hugo`, `eleventy`, `jekyll`, `astro` |
-| `--preset` | - | Use preset configuration |
-| `--include-drafts` | `false` | Include draft posts |
-| `--include-responses` | `false` | Include response posts |
-| `--embed-mode` | `preserve` | Embed handling: `preserve`, `clean`, `remove` |
-| `--image-mode` | `download` | Image handling: `download`, `reference` |
-| `--supplementary` | `all` | Supplementary data to include |
-| `--date-format` | - | Custom date format string |
-| `--slug-format` | `lowercase` | Slug format: `lowercase`, `preserve` |
-| `--add-reading-time` | `false` | Add reading time to front matter |
-| `--add-word-count` | `false` | Add word count to front matter |
-| `--section-breaks` | - | Section break marker |
-| `--config` | `.meddlerrc.json` | Configuration file path |
-| `--dry-run` | `false` | Show what would be converted |
-| `--verbose` | `false` | Verbose output |
+| `-o, --output <dir>` | `./meddler-output` | Output directory |
+| `-f, --format <fmt>` | `yaml` | Front matter format: `yaml`, `toml`, `json`, `none` |
+| `--output-format <fmt>` | `markdown` | Output format: `markdown`, `html`, `structured-json` |
+| `-t, --target <ssg>` | `generic` | Target SSG: `generic`, `hugo`, `eleventy`, `jekyll`, `astro` |
+| `--drafts` / `--no-drafts` | include | Include or exclude draft posts |
+| `--responses` | `false` | Include short responses/comments |
+| `--images <mode>` | `reference` | Image handling: `reference`, `download`, `optimize` |
+| `--embeds <mode>` | `raw_html` | Embed handling: `raw_html`, `shortcodes`, `placeholders` |
+| `--earnings` | `false` | Inject partner program earnings into front matter |
+| `--unquoted-dates` | `false` | Output dates without quotes (Eleventy compatibility) |
+| `--rewrite-image-urls` | `false` | Rewrite Medium CDN URLs to local paths |
+| `--image-base-url <url>` | `/images` | Base URL for rewritten images |
+| `--supplementary` / `--no-supplementary` | include | Convert supplementary data (bookmarks, claps, etc.) |
+| `--include-all` | `false` | Include all data including sessions, IPs, blocks |
+| `--dry-run` | `false` | Preview what would be generated without writing files |
+| `--verbose` | `false` | Verbose logging output |
 | `-h, --help` | - | Show help |
-| `-v, --version` | - | Show version |
-
-### `validate`
-
-Validate a Medium export without converting.
-
-```bash
-meddler validate medium-export.zip
-```
-
-### `info`
-
-Show information about a Medium export.
-
-```bash
-meddler info medium-export.zip
-```
-
-## Configuration File
-
-Create `.meddlerrc.json` in your project directory:
-
-```json
-{
-  "frontMatter": "yaml",
-  "target": "hugo",
-  "format": "markdown",
-  "outputDir": "content",
-  "includeDrafts": true,
-  "includeResponses": false,
-  "embedMode": "preserve",
-  "imageMode": "download",
-  "supplementary": ["profile", "earnings"],
-  "dateFormat": "2006-01-02",
-  "slugFormat": "lowercase",
-  "addReadingTime": true,
-  "addWordCount": true,
-  "sectionBreaks": "###",
-  "extraFields": {
-    "author": "{{author.name}}",
-    "locale": "en-US",
-    "canonical_url": "{{url}}"
-  }
-}
-```
-
-### Field Templates
-
-Use template variables in `extraFields`:
-
-- `{{title}}` - Post title
-- `{{slug}}` - Post slug
-- `{{date}}` - Publication date
-- `{{author.name}}` - Author display name
-- `{{author.username}}` - Author username
-- `{{url}}` - Original Medium URL
-- `{{wordCount}}` - Word count
-- `{{readingTime}}` - Reading time in minutes
-
-## Presets
-
-### Hugo
-
-```json
-{
-  "target": "hugo",
-  "frontMatter": "yaml",
-  "format": "markdown",
-  "dateFormat": "2006-01-02",
-  "contentDir": "content/posts",
-  "draftDir": "content/drafts"
-}
-```
-
-### Eleventy
-
-```json
-{
-  "target": "eleventy",
-  "frontMatter": "yaml",
-  "format": "markdown",
-  "dateFormat": "YYYY-MM-DD",
-  "contentDir": "posts",
-  "draftDir": "drafts"
-}
-```
-
-### Jekyll
-
-```json
-{
-  "target": "jekyll",
-  "frontMatter": "yaml",
-  "format": "markdown",
-  "dateFormat": "YYYY-MM-DD",
-  "contentDir": "_posts",
-  "draftDir": "_drafts"
-}
-```
-
-### Astro
-
-```json
-{
-  "target": "astro",
-  "frontMatter": "yaml",
-  "format": "markdown",
-  "dateFormat": "YYYY-MM-DD",
-  "contentDir": "src/content/blog",
-  "draftDir": "src/content/drafts"
-}
-```
+| `-V, --version` | - | Show version |
 
 ## Examples
 
-### Convert with Custom Settings
+### Eleventy Setup
 
 ```bash
-meddler convert export.zip \
-  --front-matter toml \
-  --target astro \
-  --format html \
-  --include-drafts \
-  --supplementary profile,earnings \
-  --add-reading-time
+meddler medium-export.zip \
+  --target eleventy \
+  --format yaml \
+  --images download \
+  --unquoted-dates \
+  --rewrite-image-urls \
+  --image-base-url "/assets/images"
 ```
 
-### Use Configuration File
+### Hugo with Shortcodes
 
 ```bash
-# Create config
-cat > .meddlerrc.json << EOF
-{
-  "target": "eleventy",
-  "includeDrafts": true,
-  "addReadingTime": true
-}
-EOF
-
-# Convert using config
-meddler convert export.zip
+meddler medium-export.zip \
+  --target hugo \
+  --embeds shortcodes \
+  --images download
 ```
 
-### Dry Run
+### Minimal Export
 
 ```bash
-# Preview what will be converted
-meddler validate export.zip --verbose
-meddler convert export.zip --dry-run
+meddler medium-export.zip \
+  --format none \
+  --no-supplementary \
+  --no-drafts
 ```
 
 ## Output Structure
 
+Output layout follows the conventions of the selected target. For the default `generic` target:
+
 ```
 meddler-output/
-├── content/
-│   ├── posts/
-│   │   ├── 2024-01-01_my-post.md
-│   │   └── 2024-01-02-another-post.md
-│   └── drafts/
-│       └── draft-post.md
+├── posts/
+│   ├── my-post.md
+│   └── another-post.md
+├── drafts/
+│   └── draft-post.md
 ├── data/
 │   ├── author.json
 │   ├── publications.json
-│   ├── lists/
-│   │   └── reading-list.json
-│   └── earnings.json
+│   ├── bookmarks.json
+│   ├── claps.json
+│   ├── highlights.json
+│   ├── interests.json
+│   ├── earnings.json
+│   ├── following.json
+│   └── lists/
 ├── images/
-│   ├── image1.jpg
-│   └── image2.png
-└── meddler.log
+│   └── <slug>/
+└── meddler-report.json
 ```
+
+Other targets use their conventional layouts — e.g. Jekyll writes `_posts/YYYY-MM-DD-slug.md` and `_drafts/`, Hugo writes page bundles under `content/posts/<slug>/index.md`, Astro writes `src/content/posts/`.
+
+## Front Matter
+
+Generated front matter includes `title`, `subtitle`, `date`, `slug`, `canonical_url`, `author`, `medium_id`, `draft`, `tags`, `image`, and `image_caption` where available. Dates are emitted in ISO 8601. Use `--earnings` to add Partner Program earnings, and `--format none` to omit front matter entirely.
 
 ## Error Handling
 
-The CLI provides detailed error messages:
+The CLI validates the export before converting and provides detailed error messages:
 
-- **Invalid export**: "This doesn't look like a Medium export. No README.html found."
-- **No posts**: "This export doesn't contain any posts."
-- **Permission denied**: "Cannot write to output directory."
-- **Corrupted file**: "Failed to read ZIP file."
+- **Invalid export**: no `README.html` found in the export
+- **No posts**: the export doesn't contain any posts — only supplementary data is processed
+- **Image failures**: counted in `meddler-report.json` without aborting the run
 
 ## Tips
 
 1. **Backup your export**: Always keep the original Medium export
-2. **Test with dry-run**: Use `--dry-run` to preview changes
-3. **Use presets**: Start with a preset, then customize
-4. **Check output**: Review converted files before publishing
+2. **Test with dry-run**: Use `--dry-run` to preview output
+3. **Use a target**: Start with `--target`, then customise with flags
+4. **Check output**: Review `meddler-report.json` for warnings and errors
 5. **Handle images**: Choose `download` for self-contained sites or `reference` for external hosting
 
 ## Troubleshooting
@@ -286,23 +158,8 @@ The CLI provides detailed error messages:
 ### Large Exports
 
 For exports with many posts (>1000), consider:
-- Using `--exclude-images` if images are hosted elsewhere
-- Splitting conversion into batches
-- Increasing Node.js memory: `node --max-old-space-size=4096 $(which meddler)`
-
-### Memory Issues
-
-```bash
-# Increase Node.js memory limit
-export NODE_OPTIONS="--max-old-space-size=4096"
-meddler convert large-export.zip
-```
-
-### Performance
-
-- SSD storage improves ZIP extraction speed
-- More RAM helps with large exports
-- Close other applications during conversion
+- Using `--images reference` if images are hosted elsewhere
+- Increasing Node.js memory: `export NODE_OPTIONS="--max-old-space-size=4096"`
 
 ## Integration
 
@@ -318,7 +175,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
       - run: npm install -g meddler-cli
-      - run: meddler convert medium-export.zip --preset hugo
+      - run: meddler medium-export.zip --target hugo
       - uses: actions/upload-artifact@v2
         with:
           name: site
@@ -331,7 +188,7 @@ jobs:
 .PHONY: convert clean
 
 convert:
-	meddler convert medium-export.zip --preset hugo
+	meddler medium-export.zip --target hugo
 
 clean:
 	rm -rf meddler-output

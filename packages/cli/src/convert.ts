@@ -36,7 +36,7 @@ export async function runConversion(
   const report: ConversionReport = {
     generatedAt: new Date().toISOString(),
     tool: 'meddler-cli',
-    version: '1.0.2',
+    version: '1.1.0',
     config: {
       format: config.format,
       outputFormat: config.outputFormat,

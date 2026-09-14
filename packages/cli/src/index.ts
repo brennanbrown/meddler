@@ -22,7 +22,7 @@ const program = new Command();
 program
   .name('meddler')
   .description('Convert a Medium data export into clean, portable formats for static site generators.')
-  .version('1.0.2')
+  .version('1.1.0')
   .argument('<input-path>', 'Path to extracted Medium export folder or .zip file')
   .option('-o, --output <dir>', 'Output directory', DEFAULT_CONFIG.output)
   .option('-f, --format <fmt>', 'Front matter format: yaml, toml, json, none', DEFAULT_CONFIG.format)
