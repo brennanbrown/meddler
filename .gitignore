@@ -1,11 +1,57 @@
+# Dependencies
 node_modules/
+
+# Build output
 dist/
+build/
+out/
+*.tsbuildinfo
+
+# Env / secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Test / coverage output
+coverage/
+.nyc_output/
+
+# Caches
+.cache/
+.vite/
+.eslintcache
+.stylelintcache
+.parcel-cache/
+
+# Package artifacts
+*.tgz
+
+# Netlify
+.netlify/
+
+# Meddler output
 .meddler-extracted/
 meddler-output/
 medium-export*
 meddler-export*
-*.tgz
-*.tsbuildinfo
+
+# Editors / IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
 # macOS duplicates
 * 2.*
 * 2
