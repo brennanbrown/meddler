@@ -4,7 +4,7 @@
 
 Ⓜ️ Convert your Medium export to Markdown with front matter for Hugo, Eleventy, Jekyll, Astro, and more.
 
-This is the convenience package for [Meddler](https://meddler.fyi). It wraps `@berryhouse/meddler` so you can install with a simple name.
+This is the convenience package for [Meddler](https://meddler.fyi). It wraps `@brennanbrown/meddler` so you can install with a simple name.
 
 ## Installation
 
@@ -16,13 +16,13 @@ npm install -g meddler-cli
 
 ```bash
 # Convert with default settings
-meddler convert medium-export.zip
+meddler medium-export.zip
 
 # Specify output directory
-meddler convert medium-export.zip -o my-site
+meddler medium-export.zip -o my-site
 
-# Use a preset
-meddler convert medium-export.zip --preset eleventy
+# Target a specific SSG
+meddler medium-export.zip --target eleventy
 
 # See all options
 meddler --help
@@ -47,7 +47,7 @@ Meddler is not affiliated with, endorsed by, or connected to Medium in any way. 
 
 ## About
 
-Meddler is a  [Berry House](https://berryhouse.ca) project created by [Brennan Kenneth Brown](https://brennan.day).
+Meddler is a [Berry House](https://berryhouse.ca) project created by [Brennan Kenneth Brown](https://brennan.day).
 
 If you find Meddler useful and want to support projects like this, please consider [donating on Ko-fi](https://ko-fi.com/brennan).
 

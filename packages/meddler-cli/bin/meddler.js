@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-require('@berryhouse/meddler/dist/index.js');
+require('@brennanbrown/meddler/dist/index.js');
